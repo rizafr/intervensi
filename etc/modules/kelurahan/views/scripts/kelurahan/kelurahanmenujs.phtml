@@ -1,0 +1,96 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function cariKelurahan(){
+	
+	$("#frmCariKelurahan").ajaxForm(frmCariKelurahan_opt);
+}
+
+var frmCariKelurahan_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/kelurahan/kelurahan/kelurahanmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function kelurahanMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/kelurahan/kelurahan/kelurahanmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function kelurahanForm(jenisForm, kode_kelurahan)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/kelurahan/kelurahan/kelurahanolahdata';
+	
+	var param = { jenisForm:jenisForm, kode_kelurahan:kode_kelurahan};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkelurahan").ajaxForm(tambahKelurahan_opt);
+		jQuery("#frmubahkelurahan").ajaxForm(ubahKelurahan_opt);		
+		});
+	
+}
+
+var tambahKelurahan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kelurahan/kelurahan/simpankelurahan',
+	beforeSubmit : function() {
+		if (document.getElementById('kode_kelurahan').value == ''){
+			alert('Kode Kelurahan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Kelurahan').value == ''){
+			alert('Nama Kelurahan harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKelurahan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kelurahan/kelurahan/simpankelurahanedit',
+	beforeSubmit : function() {
+		if (document.getElementById('kode_kelurahan').value == ''){
+			alert('Kode Kelurahan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Kelurahan').value == ''){
+			// alert('Nama Kelurahan harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Kelurahanhapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/kelurahan/kelurahan/kelurahanhapus';
+		var opt = {kode_kelurahan : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

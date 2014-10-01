@@ -1,0 +1,424 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function generateKodeKegiatan(tgl){
+	KodeDetailSubKomponen = document.getElementById('KodeDetailSubKomponen').value;
+	document.getElementById('KodeKegiatan').value= KodeDetailSubKomponen + tgl;
+}
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+function pilihInstansi(){
+	Instansi = document.getElementById('KodeInstansi').value;
+	jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanolahdata';
+	var param = {KodeInstansi:KodeInstansi,jenisForm:jenisForm};
+}
+
+function pilihKomponen(){
+	KodeKomponen = document.getElementById('KodeKomponen').value;
+	jenisForm = document.getElementById('jenisForm').value;	
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanolahdata';
+	var param = {KodeKomponen:KodeKomponen, jenisForm:jenisForm};
+	
+}
+
+function pilihSubKomponen(){
+	KodeSubKomponen = document.getElementById('KodeSubKomponen').value;
+	jenisForm = document.getElementById('jenisForm').value;	
+	
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanolahdata';
+	var param = {KodeDetailSubKomponen:KodeDetailSubKomponen, jenisForm:jenisForm};
+	
+}
+
+function pilihSubKomponenDetail(){
+	KodeDetailSubKomponen = document.getElementById('KodeDetailSubKomponen').value;
+	jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanolahdata';
+	var param = {KodeDetailSubKomponen:KodeDetailSubKomponen,jenisForm:jenisForm};
+	
+}
+
+function pilihKelurahan(jenisForm){
+	nama_kelurahan = document.getElementById('nama_kelurahan').value;
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimaolahdata';
+	var param = {nama_kelurahan:nama_kelurahan,jenisForm:jenisForm};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function cariKegiatan(){
+	$("#frmCariKegiatan").ajaxForm(frmCariKegiatan_opt);
+}
+
+var frmCariKegiatan_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function kegiatanMenu(){
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function KegiatanForm(jenisForm, KodeKegiatan, KodeInstansi){
+	
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanolahdata';
+	
+	var param = { jenisForm:jenisForm, KodeKegiatan:KodeKegiatan, KodeInstansi:KodeInstansi};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkegiatan").ajaxForm(tambahKegiatan_opt);
+		jQuery("#frmubahkegiatan").ajaxForm(ubahKegiatan_opt);		
+		});
+	
+}
+
+var tambahKegiatan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/simpankegiatan',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeKegiatan').value == ''){
+			alert('Kode Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('NamaKegiatan').value == ''){
+			alert('Nama Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('JadwalAwal').value == ''){
+			alert('Jadwal Awal Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('JadwalAkhir').value == ''){
+			alert('Jadwal Akhir Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeInstansi').value == ''){
+			alert('Instansi harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeDetailSubKomponen').value == ''){
+			alert('Kode Detail Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Anggaran').value == ''){
+			alert('Anggaran harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKegiatan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/simpankegiatanedit',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeKegiatan').value == ''){
+			alert('Kode Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('NamaKegiatan').value == ''){
+			alert('Nama Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('JadwalAwal').value == ''){
+			alert('Jadwal Awal Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('JadwalAkhir').value == ''){
+			alert('Jadwal Akhir harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeInstansi').value == ''){
+			alert('Instansi harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeDetailSubKomponen').value == ''){
+			alert('Kode Detail Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Anggaran').value == ''){
+			alert('Anggaran harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Kegiatanhapus(param1, param2){ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanhapus';
+		var opt = {KodeKegiatan : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}
+
+//==============================================================================================================================================
+function BukaWindowsCetak(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function Cetak(KodeKegiatan){
+	KodeKegiatan = document.getElementById('KodeKegiatan').value;
+	url = 'http://127.0.0.1:51817/viewer/frameset?__report=E%3A%5Cworkspace+PLA%5CreportKelurahan%5Ckegiatankelurahan.rptdesign&__format=html&__svg=false&__locale=en_US&__timezone=Asia%2FBangkok&__masterpage=true&__rtl=false&__cubememsize=10&__resourceFolder=E%3A%5Cworkspace+PLA%5CreportKelurahan&__dpi=96&1059376877&KodeKegiatan='+KodeKegiatan+'&Kelurahan='+Kelurahan;
+	var param = {KodeKegiatan:KodeKegiatan};
+	BukaWindowsCetak();
+}
+
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function PilihanData(NIK ,NamaLengkap, Alamat, Status, Kelurahan) {  
+	
+	alert("Data berhasil dimasukkan");
+	
+	opener.document.forms[0].NIK.value = NIK;
+	opener.document.forms[0].NamaLengkap.value = NamaLengkap;	
+	opener.document.forms[0].Alamat.value = Alamat;	
+	opener.document.forms[0].Status.value = Status;	
+	opener.document.forms[0].Kelurahan.value = Kelurahan;
+	window.close();		
+ }
+
+ 
+function cariPenduduk(){
+
+	NIK = document.getElementById('NIK').value;
+	url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/namapenduduk';
+	
+	var param = {NIK:NIK};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function cariPendaftar(){
+	alert("hallo");
+	// NIK = document.getElementById('NIK').value;
+	//KodeKegiatan = document.getElementById('KodeKegiatan').value;
+	carii = document.getElementById('carii').value;
+	kategoriCari = document.getElementById('kategoriCari').value;
+	alert(carii, kategoriCari);
+	url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimamenu';
+	
+	var param = {carii:carii, kategoriCari:kategoriCari};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function Popup(){
+	NIK = document.getElementById('NIK').value;
+	url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/namapenduduk';
+	var param = {NIK:NIK};
+	BukaWindows();
+}
+
+function penerimaMenu(KodeKegiatan){
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimamenu';
+	var param = {KodeKegiatan:KodeKegiatan};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+function PenerimaForm(KodeKegiatan){	
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimamenu';	
+	var param = {KodeKegiatan:KodeKegiatan};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function cariPenerima(){
+	
+	$("#frmCariPenerima").ajaxForm(frmCariPenerima_opt);
+}
+
+var frmCariPenerima_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimamenu',
+	type: 'post', 
+	resetForm: false
+};
+
+function OlahDataForm(jenisForm, NIK, KodeKegiatan,NamaKegiatan){	
+	var url = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimaolahdata';	
+	var param = { jenisForm:jenisForm, NIK:NIK, KodeKegiatan:KodeKegiatan, NamaKegiatan:NamaKegiatan};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+		jQuery("#frmtambahpenerima").ajaxForm(tambahPenerima_opt);
+		jQuery("#frmubahpenerima").ajaxForm(ubahPenerima_opt);		
+	});
+}
+
+var lihatpenerima_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimamenu',
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+}; 
+
+var tambahPenerima_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/simpanpenerima',
+	beforeSubmit : function() {
+		if (document.getElementById('NIK').value == ''){
+			alert('NIK harus Diisi');
+			return false;
+		}
+		if (document.getElementById('NamaLengkap').value == ''){
+			alert('Nama harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Alamat').value == ''){
+			alert('Alamat Akhir harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Kelurahan').value == ''){
+			alert('Kelurahan Akhir harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKegiatan').value == ''){
+			alert('Kode Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Ket').value == ''){
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahPenerima_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kegiatan/kegiatan/simpanpenerimaedit',
+	beforeSubmit : function() {
+		if (document.getElementById('NIK').value == ''){
+			alert('NIK harus Diisi');
+			return false;
+		}
+		if (document.getElementById('NamaLengkap').value == ''){
+			alert('Nama harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Alamat').value == ''){
+			alert('Alamat Akhir harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Kelurahan').value == ''){
+			alert('Kelurahan Akhir harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKegiatan').value == ''){
+			alert('Kode Kegiatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Ket').value == ''){
+			alert('Keterangan harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Penerimahapus(param1, NIK, KodeKegiatan){ 
+	
+	if(ConfirmDelete(param1, NIK, KodeKegiatan))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/kegiatan/kegiatan/penerimahapus';
+		var opt = {NIK : NIK, KodeKegiatan:KodeKegiatan};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}
+
+$(function() {
+$( "#from" ).datepicker({
+defaultDate: "+1w",
+changeMonth: true,
+changeYear: true,
+onClose: function( selectedDate ) {
+$( "#to" ).datepicker( "option", "minDate", selectedDate );
+}
+});
+$( "#to" ).datepicker({
+defaultDate: "+1w",
+changeMonth: true,
+changeYear: true,
+onClose: function( selectedDate ) {
+$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+}
+});
+});
+
+</script>

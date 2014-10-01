@@ -1,0 +1,445 @@
+<?php
+class Biodata_Datapokok_Service {
+    private static $instance;
+  
+    private function __construct() {
+    }
+
+    public static function getInstance() {
+       if (!isset(self::$instance)) {
+           $c = __CLASS__;
+           self::$instance = new $c;
+       }
+       return self::$instance;
+    }
+public function getTmPegawai($cari) {
+		$registry = Zend_Registry::getInstance();
+		$db = $registry->get('db');
+		try {
+			$db->setFetchMode(Zend_Db::FETCH_OBJ); 
+			
+				$result = $db->fetchAll("select i_nip,n_nama,n_gelar,n_tmplahir,d_tgllahir,n_jnskelamin,c_agama,
+									c_goldarah,n_hobby, c_pendidikan, c_identitas, n_identitas, c_status, 
+									c_bagian, c_jabatan, c_gol, c_jurusan, n_alamatrmh, i_kodepos, 
+									c_propinsi, c_kota, i_telp, i_hp, n_email, i_entry, d_entry, 
+									i_entry_update, d_entry_update,
+									cast(Month(d_tglLahir)AS VARCHAR) as bulanlahir,
+									DATENAME(d, d_tglLahir) as tanggallahir,
+									DATENAME(yyyy, d_tglLahir) as tahunlahir,
+									i_nik,i_nidn,c_pendidik,id,
+									cast(Month(d_pegawai)AS VARCHAR) as bulanmasuk,
+									DATENAME(d, d_pegawai) as tanggalmasuk,
+									DATENAME(yyyy, d_pegawai) as tahunmasuk,
+								    datediff(yy, d_pegawai,getdate() ) as masakerja									
+									from tm_pegawai where 1=1 $cari order by n_nama asc");
+
+			$jmlResult = count($result);
+			for ($j = 0; $j < $jmlResult; $j++) {
+			
+/* 				$n_status = $db->fetchOne('select n_statusikatandosen from tr_statusikatandosen where c_statusikatandosen = ?',$result[$j]->c_status);
+				$n_pendidikan = $db->fetchOne('select n_tingkatpend from tr_tingkatpend where c_tingkatpend = ?',$result[$j]->c_pendidikan);
+				$n_agama = $db->fetchOne('select n_agama from tr_agama where c_agama = ?',$result[$j]->c_agama);
+				$n_propinsi = $db->fetchOne('select n_propinsi from tr_propinsi where c_propinsi = ?',$result[$j]->c_propinsi);
+				$n_kota = $db->fetchOne('select n_kab from tr_kabupaten where id_prop = ?',$result[$j]->c_propinsi);
+				$n_goldarah = $db->fetchOne('select n_goldarah from tr_goldarah where c_goldarah = ?',$result[$j]->c_goldarah);
+				$n_jabatan = $db->fetchOne('select n_jbtstruktural from tr_jbtstruktural where c_jbtstruktural = ?',$result[$j]->c_jabatan);
+				$n_jurusan = $db->fetchOne('select n_prodi from tr_prodi where c_prodi = ?',$result[$j]->c_jurusan);
+				$n_golongan = $db->fetchOne('select n_golongan from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_pangkat = $db->fetchOne('select n_alias from tr_golongan where n_golongan = ?',$result[$j]->c_gol); */
+				$n_pendidikan = $db->fetchOne('select n_tingkatpend from tr_tingkatpend where c_tingkatpend = ?',$result[$j]->c_pendidikan);
+				$n_golongan = $db->fetchOne('select n_golongan from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_pangkat = $db->fetchOne('select n_alias from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_golongan =$n_golongan."-".$n_pangkat;
+				$n_jabatan = $db->fetchOne('select n_jbtstruktural from tr_jbtstruktural where c_jbtstruktural = ?',$result[$j]->c_jabatan);		
+				$n_goldarah = $db->fetchOne('select n_goldarah from tr_goldarah where c_goldarah = ?',$result[$j]->c_goldarah);
+				$data[$j] = array("i_nip"=>(string)$result[$j]->i_nip,
+								"i_nik"=>(String)$result[$j]->i_nik,
+								"i_nidn"=>(String)$result[$j]->i_nidn,
+								"c_pendidik"=>(String)$result[$j]->c_pendidik,
+								"n_pendidikan"=>$n_pendidikan,
+								"id"=>(String)$result[$j]->id,	
+								"n_nama"=>(string)$result[$j]->n_nama,
+								"n_gelar"=>(string)$result[$j]->n_gelar,
+								"n_tmplahir"=>(string)$result[$j]->n_tmplahir,
+								"d_tgllahir"=>(string)$result[$j]->d_tgllahir,
+								"n_jnskelamin"=>(string)$result[$j]->n_jnskelamin,
+								"c_agama"=>(string)$result[$j]->c_agama,
+								"n_agama"=>$n_agama,
+								"c_goldarah"=>(string)$result[$j]->c_goldarah,
+								"n_goldarah"=>$n_goldarah,								
+								"n_hobby"=>(string)$result[$j]->n_hobby ,
+								"c_pendidikan"=>(string)$result[$j]->c_pendidikan ,								
+								"n_pendidikan"=>$n_pendidikan,
+								"c_identitas"=>(string)$result[$j]->c_identitas ,
+								"n_identitas"=>(string)$result[$j]->n_identitas ,
+								"c_status"=>(string)$result[$j]->c_status ,
+								"n_status"=>$n_status ,
+								"c_bagian"=>(string)$result[$j]->c_bagian ,
+								"c_jabatan"=>(string)$result[$j]->c_jabatan ,
+								"n_jabatan"=>$n_jabatan ,
+								"c_gol"=>(string)$result[$j]->c_gol ,
+								"n_golongan"=>$n_golongan,
+								"n_pangkat"=>$n_pangkat,
+								"c_jurusan"=>(string)$result[$j]->c_jurusan ,
+								"n_jurusan"=>$n_jurusan ,
+								"n_alamatrmh"=>(string)$result[$j]->n_alamatrmh ,
+								"i_kodepos"=>(string)$result[$j]->i_kodepos ,
+								"c_propinsi"=>(string)$result[$j]->c_propinsi,
+								"n_propinsi"=>$n_propinsi,
+								"c_kota"=>(string)$result[$j]->c_kota ,
+								"n_kota"=>$n_kota ,
+								"i_telp"=>(string)$result[$j]->i_telp ,
+								"i_hp"=>(string)$result[$j]->i_hp ,
+								"n_email"=>(string)$result[$j]->n_email ,
+								"tanggallahir"=>(String)$result[$j]->tanggallahir,	
+								"bulanlahir"=>(String)$result[$j]->bulanlahir,	
+								"tahunlahir"=>(String)$result[$j]->tahunlahir,
+								"tanggalmasuk"=>(String)$result[$j]->tanggalmasuk,	
+								"bulanmasuk"=>(String)$result[$j]->bulanmasuk,	
+								"tahunmasuk"=>(String)$result[$j]->tahunmasuk,								
+								"i_entry"=>(string)$result[$j]->i_entry ,
+								"d_entry"=>(string)$result[$j]->d_entry ,
+								"masakerja"=>(String)$result[$j]->masakerja,		
+								"i_entry_update"=>(string)$result[$j]->i_entry_update ,
+								"d_entry_update"=>(string)$result[$j]->d_entry_update);
+				}
+						
+		     return $data;
+		   } catch (Exception $e) {
+	         echo $e->getMessage().'<br>';
+		     return 'Data tidak ada <br>';
+		   }
+	 
+	}	
+public function getTmPegawai2($cari, $currentPage, $numToDisplay,$total) {		
+		$registry = Zend_Registry::getInstance();
+		$db = $registry->get('db');
+	   
+		try {
+			$db->setFetchMode(Zend_Db::FETCH_OBJ); 
+		 
+			$xLimit=$itemPerPage;
+			$xOffset=($pageNumber-1)*$itemPerPage;
+			
+			if(($currentPage==0) && ($numToDisplay==0))
+			{
+				$hasilAkhir = $db->fetchOne("select count(*) from tm_pegawai where 1=1 $cari");
+			}
+			else
+			{
+			
+			 $count = $currentPage*1*$numToDisplay*1;
+			 
+			  if ($count>=$total){
+			  $count=$numToDisplay-($count-$total);
+			  $orderby='desc';
+			  }
+			  else{$orderby='asc';}
+
+				$sqlData= "	select * from (
+							select top $numToDisplay * from 
+							(select top $count i_nip,n_nama,n_gelar,n_tmplahir,d_tgllahir,n_jnskelamin,c_agama,
+																c_goldarah,n_hobby, c_pendidikan, c_identitas, n_identitas, c_status, 
+																c_bagian, c_jabatan, c_gol, c_jurusan, n_alamatrmh, i_kodepos, 
+																c_propinsi, c_kota, i_telp, i_hp, n_email, i_entry, d_entry, 
+																i_entry_update, d_entry_update,
+																cast(Month(d_tglLahir)AS VARCHAR) as bulanlahir,
+																DATENAME(d, d_tglLahir) as tanggallahir,
+																DATENAME(yyyy, d_tglLahir) as tahunlahir,
+																i_nik,i_nidn,c_pendidik,id,
+																cast(Month(d_pegawai)AS VARCHAR) as bulanmasuk,
+																DATENAME(d, d_pegawai) as tanggalmasuk,
+																DATENAME(yyyy, d_pegawai) as tahunmasuk,
+																datediff(yy, d_pegawai,getdate() ) as masakerja
+																from tm_pegawai where 1=1 $cari order by i_nip $orderby) as newtbl 
+							order by i_nip desc
+							) as newtbl2 order by i_nip $orderby";
+
+//echo $sqlData;							
+ //select datediff(yy, d_tgllahir,getdate() ),datediff(mm, d_tgllahir,getdate() ),i_nik,d_tgllahir
+// from tm_pegawai
+// where datediff(yy,d_tgllahir, getdate() ) <= 50
+					
+				// $sqlProses2 = $this->limit2($sqlProses1,$xLimit, $xOffset)	;
+				// $sqlData = $sqlProses2;
+				$result = $db->fetchAll($sqlData);			
+				$jmlResult = count($result);
+			
+				for ($j = 0; $j < $jmlResult; $j++) {
+				/* 				
+				$n_status = $db->fetchOne('select n_statusikatandosen from tr_statusikatandosen where c_statusikatandosen = ?',$result[$j]->c_status);
+				$n_pendidikan = $db->fetchOne('select n_tingkatpend from tr_tingkatpend where c_tingkatpend = ?',$result[$j]->c_pendidikan);
+				$n_agama = $db->fetchOne('select n_agama from tr_agama where c_agama = ?',$result[$j]->c_agama);
+				$n_propinsi = $db->fetchOne('select n_propinsi from tr_propinsi where c_propinsi = ?',$result[$j]->c_propinsi);
+				$n_kota = $db->fetchOne('select n_kab from tr_kabupaten where id_prop = ?',$result[$j]->c_propinsi);
+				$n_goldarah = $db->fetchOne('select n_goldarah from tr_goldarah where c_goldarah = ?',$result[$j]->c_goldarah);
+				$n_jabatan = $db->fetchOne('select n_jbtstruktural from tr_jbtstruktural where c_jbtstruktural = ?',$result[$j]->c_jabatan);
+				$n_jurusan = $db->fetchOne('select n_prodi from tr_prodi where c_prodi = ?',$result[$j]->c_jurusan);
+				; */
+				$n_pendidikan = $db->fetchOne('select n_tingkatpend from tr_tingkatpend where c_tingkatpend = ?',$result[$j]->c_pendidikan);
+				$n_golongan = $db->fetchOne('select n_golongan from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_pangkat = $db->fetchOne('select n_alias from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_golongan =$n_golongan."-".$n_pangkat;
+				$n_jabatan = $db->fetchOne('select n_jbtstruktural from tr_jbtstruktural where c_jbtstruktural = ?',$result[$j]->c_jabatan);
+				$n_goldarah = $db->fetchOne('select n_goldarah from tr_goldarah where c_goldarah = ?',$result[$j]->c_goldarah);
+					$hasilAkhir[$j] = array("i_nip"=>(string)$result[$j]->i_nip,
+								"i_nik"=>(String)$result[$j]->i_nik,
+								"i_nidn"=>(String)$result[$j]->i_nidn,
+								"c_pendidik"=>(String)$result[$j]->c_pendidik,
+								"n_pendidikan"=>$n_pendidikan,
+								"id"=>(String)$result[$j]->id,	
+								"n_nama"=>(string)$result[$j]->n_nama,
+								"n_gelar"=>(string)$result[$j]->n_gelar,
+								"n_tmplahir"=>(string)$result[$j]->n_tmplahir,
+								"d_tgllahir"=>(string)$result[$j]->d_tgllahir,
+								"n_jnskelamin"=>(string)$result[$j]->n_jnskelamin,
+								"c_agama"=>(string)$result[$j]->c_agama,
+								"n_agama"=>$n_agama,								
+								"c_goldarah"=>(string)$result[$j]->c_goldarah,
+								"n_goldarah"=>$n_goldarah,								
+								"n_hobby"=>(string)$result[$j]->n_hobby ,
+								"c_pendidikan"=>(string)$result[$j]->c_pendidikan ,								
+								"n_pendidikan"=>$n_pendidikan,
+								"c_identitas"=>(string)$result[$j]->c_identitas ,
+								"n_identitas"=>(string)$result[$j]->n_identitas ,
+								"c_status"=>(string)$result[$j]->c_status ,
+								"n_status"=>$n_status ,
+								"c_bagian"=>(string)$result[$j]->c_bagian ,
+								"c_jabatan"=>(string)$result[$j]->c_jabatan ,
+								"n_jabatan"=>$n_jabatan ,
+								"c_gol"=>(string)$result[$j]->c_gol ,
+								"n_golongan"=>$n_golongan,
+								"n_pangkat"=>$n_pangkat,
+								"c_jurusan"=>(string)$result[$j]->c_jurusan ,
+								"n_jurusan"=>$n_jurusan ,
+								"n_alamatrmh"=>(string)$result[$j]->n_alamatrmh ,
+								"i_kodepos"=>(string)$result[$j]->i_kodepos ,
+								"c_propinsi"=>(string)$result[$j]->c_propinsi,
+								"n_propinsi"=>$n_propinsi,
+								"c_kota"=>(string)$result[$j]->c_kota ,
+								"n_kota"=>$n_kota ,
+								"i_telp"=>(string)$result[$j]->i_telp ,
+								"i_hp"=>(string)$result[$j]->i_hp ,
+								"n_email"=>(string)$result[$j]->n_email ,
+								"tanggallahir"=>(String)$result[$j]->tanggallahir,	
+								"bulanlahir"=>(String)$result[$j]->bulanlahir,	
+								"tahunlahir"=>(String)$result[$j]->tahunlahir,	
+								"i_entry"=>(string)$result[$j]->i_entry ,
+								"d_entry"=>(string)$result[$j]->d_entry ,
+								"tanggalmasuk"=>(String)$result[$j]->tanggalmasuk,	
+								"bulanmasuk"=>(String)$result[$j]->bulanmasuk,	
+								"tahunmasuk"=>(String)$result[$j]->tahunmasuk,	
+								"masakerja"=>(String)$result[$j]->masakerja,	
+								"i_entry_update"=>(string)$result[$j]->i_entry_update ,
+								"d_entry_update"=>(string)$result[$j]->d_entry_update);
+		
+				}
+			}			
+			return $hasilAkhir;						  
+			
+	   } catch (Exception $e) {
+         echo $e->getMessage().'<br>';
+	     return 'gagal <br>';
+	   }
+}		
+	
+
+	public function tambahData(array $data) {
+	   $registry = Zend_Registry::getInstance();
+	   $db = $registry->get('db');
+	   try {
+	     $db->beginTransaction();
+
+	     $tambah_data = array(	"i_nip"=>$data['i_nip'],
+								"i_nik"=>$data['i_nik'],
+								"i_nidn"=>$data['i_nidn'],
+								"c_pendidik"=>$data['c_pendidik'],
+								"n_nama"=>$data['n_nama'],
+								"n_gelar"=>$data['n_gelar'],
+								"n_tmplahir"=>$data['n_tmplahir'],
+								"d_tgllahir"=>$data['d_tgllahir'],
+								"n_jnskelamin"=>$data['n_jnskelamin'],
+								"c_agama"=>$data['c_agama'],
+								"c_goldarah"=>$data['c_goldarah'],
+								"n_hobby "=>$data['n_hobby'],
+								"c_pendidikan "=>$data['c_pendidikan'],
+								"c_identitas "=>$data['c_identitas'],
+								"n_identitas "=>$data['n_identitas'],
+								"c_status "=>$data['c_status'],
+								"c_bagian "=>$data['c_bagian'],
+								"c_jabatan "=>$data['c_jabatan'],
+								"c_gol "=>$data['c_gol'],
+								"c_jurusan "=>$data['c_jurusan'],
+								"d_pegawai"=>$data['d_pegawai'],
+								"n_alamatrmh "=>$data['n_alamatrmh'],
+								"i_kodepos "=>$data['i_kodepos'],
+								"c_propinsi "=>$data['c_propinsi'],
+								"c_kota "=>$data['c_kota'],
+								"i_telp "=>$data['i_telp'],
+								"i_hp "=>$data['i_hp'],
+								"n_email "=>$data['n_email'],
+								"i_entry "=>$data['i_entry'],
+								"d_entry"=>date("Y-m-d"));
+		 echo "jurusan ---------------->".$data['c_jurusan'];
+	     $db->insert('tm_pegawai',$tambah_data);
+		$db->commit();
+	     return 'sukses';
+	   } catch (Exception $e) {
+         $db->rollBack();
+         echo $e->getMessage().'<br>';
+	     return 'gagal';
+	   }
+	}	
+
+	public function ubahData(array $data) {
+	   $registry = Zend_Registry::getInstance();
+	   $db = $registry->get('db');
+	   try {
+	     $db->beginTransaction();
+	     $ubah_data = array(	"i_nip"=>$data['i_nip'],
+								"i_nik"=>$data['i_nik'],
+								"i_nidn"=>$data['i_nidn'],
+								"c_pendidik"=>$data['c_pendidik'],
+								"n_nama"=>$data['n_nama'],
+								"n_gelar"=>$data['n_gelar'],
+								"n_tmplahir"=>$data['n_tmplahir'],
+								"d_tgllahir"=>$data['d_tgllahir'],
+								"n_jnskelamin"=>$data['n_jnskelamin'],
+								"c_agama"=>$data['c_agama'],
+								"c_goldarah"=>$data['c_goldarah'],
+								"n_hobby "=>$data['n_hobby'],
+								"c_pendidikan "=>$data['c_pendidikan'],
+								"c_identitas "=>$data['c_identitas'],
+								"n_identitas "=>$data['n_identitas'],
+								"c_status "=>$data['c_status'],
+								"c_bagian "=>$data['c_bagian'],
+								"c_jabatan "=>$data['c_jabatan'],
+								"c_gol "=>$data['c_gol'],
+								"c_jurusan "=>$data['c_jurusan'],
+								"d_pegawai"=>$data['d_pegawai'],
+								"n_alamatrmh "=>$data['n_alamatrmh'],
+								"i_kodepos "=>$data['i_kodepos'],
+								"c_propinsi "=>$data['c_propinsi'],
+								"c_kota "=>$data['c_kota'],
+								"i_telp "=>$data['i_telp'],
+								"i_hp "=>$data['i_hp'],
+								"n_email "=>$data['n_email'],
+								"i_entry "=>$data['i_entry'],
+								"d_entry_update"=>date("Y-m-d"));
+
+		$db->update('tm_pegawai',$ubah_data, "id = '".trim($data['id'])."'");
+		$db->commit();
+	     return 'sukses';
+	   } catch (Exception $e) {
+         $db->rollBack();
+         echo $e->getMessage().'<br>';
+	     return 'gagal';
+	   }
+	}
+
+	public function hapusData($id) {
+	   $registry = Zend_Registry::getInstance();
+	   $db = $registry->get('db');
+	   try {
+	     $db->beginTransaction();
+			$where[] = "id = '".$id."'";
+			$db->delete('tm_pegawai', $where);
+			$db->commit();		
+	     return 'sukses';
+	   } catch (Exception $e) {
+         $db->rollBack();
+         echo $e->getMessage().'<br>';
+	     return 'gagal';
+	   }
+	}
+	
+	
+public function getTmPegawaiCv($cari) {
+		$registry = Zend_Registry::getInstance();
+		$db = $registry->get('db');
+		try {
+			$db->setFetchMode(Zend_Db::FETCH_OBJ); 
+			
+				$result = $db->fetchAll("select i_nip,n_nama,n_gelar,n_tmplahir,d_tgllahir,n_jnskelamin,c_agama,
+									c_goldarah,n_hobby, c_pendidikan, c_identitas, n_identitas, c_status, 
+									c_bagian, c_jabatan, c_gol, c_jurusan, n_alamatrmh, i_kodepos, 
+									c_propinsi, c_kota, i_telp, i_hp, n_email, i_entry, d_entry, 
+									i_entry_update, d_entry_update,
+									cast(Month(d_tglLahir)AS VARCHAR) as bulanlahir,
+									DATENAME(d, d_tglLahir) as tanggallahir,
+									DATENAME(yyyy, d_tglLahir) as tahunlahir,
+									i_nik,i_nidn,c_pendidik,id
+									from tm_pegawai where 1=1 $cari order by n_nama desc");
+
+			$jmlResult = count($result);
+			for ($j = 0; $j < $jmlResult; $j++) {
+			
+				$n_status = $db->fetchOne('select n_statusikatandosen from tr_statusikatandosen where c_statusikatandosen = ?',$result[$j]->c_status);
+				$n_pendidikan = $db->fetchOne('select n_tingkatpend from tr_tingkatpend where c_tingkatpend = ?',$result[$j]->c_pendidikan);
+				$n_agama = $db->fetchOne('select n_agama from tr_agama where c_agama = ?',$result[$j]->c_agama);
+				$n_propinsi = $db->fetchOne('select n_propinsi from tr_propinsi where c_propinsi = ?',$result[$j]->c_propinsi);
+				$n_kota = $db->fetchOne('select n_kab from tr_kabupaten where c_kab = ?',$result[$j]->c_kota);
+				$n_goldarah = $db->fetchOne('select n_goldarah from tr_goldarah where c_goldarah = ?',$result[$j]->c_goldarah);
+				$n_jabatan = $db->fetchOne('select n_jbtstruktural from tr_jbtstruktural where c_jbtstruktural = ?',$result[$j]->c_jabatan);
+				$n_jurusan = $db->fetchOne('select n_prodi from tr_prodi where c_prodi = ?',$result[$j]->c_jurusan);
+				$n_golongan = $db->fetchOne('select n_golongan from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				$n_pangkat = $db->fetchOne('select n_alias from tr_golongan where n_golongan = ?',$result[$j]->c_gol);
+				
+				
+				$data[$j] = array("i_nip"=>(string)$result[$j]->i_nip,
+								"i_nik"=>(String)$result[$j]->i_nik,
+								"i_nidn"=>(String)$result[$j]->i_nidn,
+								"c_pendidik"=>(String)$result[$j]->c_pendidik,
+								"id"=>(String)$result[$j]->id,	
+								"n_nama"=>(string)$result[$j]->n_nama,
+								"n_gelar"=>(string)$result[$j]->n_gelar,
+								"n_tmplahir"=>(string)$result[$j]->n_tmplahir,
+								"d_tgllahir"=>(string)$result[$j]->d_tgllahir,
+								"n_jnskelamin"=>(string)$result[$j]->n_jnskelamin,
+								"c_agama"=>(string)$result[$j]->c_agama,
+								"n_agama"=>$n_agama,
+								"c_goldarah"=>(string)$result[$j]->c_goldarah,
+								"n_goldarah"=>$n_goldarah,								
+								"n_hobby"=>(string)$result[$j]->n_hobby ,
+								"c_pendidikan"=>(string)$result[$j]->c_pendidikan ,								
+								"n_pendidikan"=>$n_pendidikan,
+								"c_identitas"=>(string)$result[$j]->c_identitas ,
+								"n_identitas"=>(string)$result[$j]->n_identitas ,
+								"c_status"=>(string)$result[$j]->c_status ,
+								"n_status"=>$n_status ,
+								"c_bagian"=>(string)$result[$j]->c_bagian ,
+								"c_jabatan"=>(string)$result[$j]->c_jabatan ,
+								"n_jabatan"=>$n_jabatan ,
+								"c_gol"=>(string)$result[$j]->c_gol ,
+								"n_golongan"=>$n_golongan,
+								"n_pangkat"=>$n_pangkat,
+								"c_jurusan"=>(string)$result[$j]->c_jurusan ,
+								"n_jurusan"=>$n_jurusan ,
+								"n_alamatrmh"=>(string)$result[$j]->n_alamatrmh ,
+								"i_kodepos"=>(string)$result[$j]->i_kodepos ,
+								"c_propinsi"=>(string)$result[$j]->c_propinsi,
+								"n_propinsi"=>$n_propinsi,
+								"c_kota"=>(string)$result[$j]->c_kota ,
+								"n_kota"=>$n_kota ,
+								"i_telp"=>(string)$result[$j]->i_telp ,
+								"i_hp"=>(string)$result[$j]->i_hp ,
+								"n_email"=>(string)$result[$j]->n_email ,
+								"tanggallahir"=>(String)$result[$j]->tanggallahir,	
+								"bulanlahir"=>(String)$result[$j]->bulanlahir,	
+								"tahunlahir"=>(String)$result[$j]->tahunlahir,	
+								"i_entry"=>(string)$result[$j]->i_entry ,
+								"d_entry"=>(string)$result[$j]->d_entry ,								
+								"i_entry_update"=>(string)$result[$j]->i_entry_update ,
+								"d_entry_update"=>(string)$result[$j]->d_entry_update);
+				}
+						
+		     return $data;
+		   } catch (Exception $e) {
+	         echo $e->getMessage().'<br>';
+		     return 'Data tidak ada <br>';
+		   }
+	 
+	}		
+
+}
+?>

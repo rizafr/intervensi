@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Sistem Intervensi Kemiskinan Kota Cimahi</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel='stylesheet' href='<? echo $this->basePath;?>/css/login.css' type='text/css' />
+<script type="text/javascript" src="<?echo $this->basePath;?>/js/jquery.js"></script>
+<script type="text/javascript" src="<?echo $this->basePath;?>/js/jquery.form.js"></script>
+</head>
+<script type="text/javascript">
+function organisasiTkIList(){
+	var idOrgTkI = document.getElementById('id_organisasiTkI').value;	
+	var url = '<?php echo $this->basePath; ?>/adm/user/organisasitk2';
+	var param = { idOrgTkI:idOrgTkI};
+	jQuery.get(url, param, function(data) {
+		jQuery("#id_organisasiTk2").html(data);
+	});
+}
+function pengguna(){
+	var idOrgTk2 = document.getElementById('id_organisasiTk2').value;	
+	var url = '<?php echo $this->basePath; ?>/home/index/home';
+	var param = { idOrgTk2:idOrgTk2};
+	jQuery.get(url, param, function(data) {
+		jQuery("#pengguna").html(data);
+	});
+}
+</script>
+<body>
+<h1>Sistem Intervensi Kemiskinan Kota Cimahi</h1>
+  <div id="page">
+    <div id="container-login">
+		<div id="result" style="display:none;"></div>
+	    <div class="container-top"></div>
+		<div class="container-right"></div>
+		<div class="container-bottom"></div>
+		<div class="container-left"></div>
+		<div class="container-top-right"></div>
+		<div class="container-bottom-right"></div>
+		<div class="container-bottom-left"></div>
+		<div class="container-top-left"></div>
+			<fieldset class="panel-form">
+			<form name="loginform" id="loginform" action="<? echo $this->basePath;?>/home/index/home" onsubmit="return validasi_input(this)" method="post">
+			  <div class="panel-login">				
+				<label for="posnusername">User ID</label>
+				<input type="text" name="pengguna" class="textbox" id="user_login"  size="23"><br>
+				<label for="pospaswword">Password</label> 
+				<input type="password" name="password" class="textbox" id="user_pass" onkeyup="dbaNameCheck(this);" size="23"><br>
+		        <div class="alignright">
+				<input type="submit" name="submit" value="Login" class="buttonsubmit"/>
+			    </div>
+
+			   </div>
+				<div class="note">
+				<? if ($this->pesanKesalahan){
+				?>
+					<font color="red"><b>
+				<? echo $this->pesanKesalahan;?>
+					</b></font>
+				<?
+				} else {
+				?>
+					Masukkan user id dan password yang sudah terdaftar untuk mengakses Sistem Intervensi Kemiskinan
+				<? } ?>
+				</div>	  
+		    </fieldset>
+		    </form>
+			</div>
+	</div>
+</body>
+</html>
+<script>
+function validasi_input(form){
+   pola_username=/^[a-zA-Z0-9\_\-]{3,100}$/;
+   if (!pola_username.test(form.user_login.value)){
+      alert ('Username minimal 3 karakter dan hanya boleh Huruf atau Angka!');
+      form.user_login.focus();
+      return false;
+   } 
+   if (!pola_username.test(form.user_pass.value)){
+      alert ('Password minimal 3 karakter dan hanya boleh Huruf atau Angka!');
+      form.user_pass.focus();
+      return false;
+   }
+return (true);
+}
+</script>

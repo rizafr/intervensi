@@ -1,0 +1,121 @@
+<? require_once 'Zend/View.php';
+   require_once "share/tanggal.php";  
+   require_once "share/pesan.php";
+   
+    $pesan = new pesan();
+	$ctrlDate = new tanggal();
+	$ctrlFrm = new Zend_View();
+
+	$par=$this->par;
+
+   $jmldatax = count($this->datasesi);
+    for ($j = 0; $j < $jmldatax; $j++) {
+								$id=trim((string)$this->datasesi[$j]['id']);
+								$c_var=trim((string)$this->datasesi[$j]['c_var']);
+								$n_var=trim((string)$this->datasesi[$j]['n_var']);
+					}	
+
+?>	
+
+<form id="frmcatatvariabel"  method="post" name="frmcatatvariabel" enctype="multipart/form-data">
+		<fieldset class="panel-form">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" >
+				<!--
+				<tr>
+					<td width="100">Kode Variabel<span class="highlight">*</span></td>
+					<td width="2">:</td>
+					<td>						
+				-->	
+						<input type="hidden" class="text"  name="c_var" id="c_var" value="<?=$c_var?>" size="40" maxlength="100"/>
+						<input type="hidden" class="text"  name="id" id="id" value="<?=$id?>" size="80" maxlength="100"/>
+				<!--
+					</td>
+				</tr>
+				-->
+				<tr>
+					<td width="180">						
+					<? 
+						if ($c_var=='thn_curr'){echo "Tahun Ajaran";}
+						if ($c_var=='smt_curr'){echo "Semester";}
+						if ($c_var=='tglawalkrs'){echo "Tanggal Awal KRS";}
+						if ($c_var=='tglakhirkrs'){echo "Tanggal Akhir KRS";}
+						if ($c_var=='tglawalisidatamhs'){echo "Tanggal Awal Yudisium";}
+						if ($c_var=='tglakhirisidatamhs'){echo "Tanggal Akhir Yudisium";}						
+					?>
+					</td>
+					<td width="2">:</td>
+					<td>
+						<!--<input type="text" class="text"  name="n_var" id="n_var" value="<?//=$n_var?>" size="80" maxlength="500"/>-->
+						<?
+						if ($c_var=='thn_curr'){
+
+						/*$jmlthnAjaranList = count($this->thnAjaranList);
+						$thnAjaranList['-'] = '--Pilih--';
+							for ($i = 0; $i < $jmlthnAjaranList; $i++) {
+							$thnAjaranList[$this->thnAjaranList[$i]->n_thnajaran] = (string)$this->thnAjaranList[$i]->n_thnajaran;			 
+							}
+						$c_thnAjaranAtrib = array("id"=>"n_var","nama"=>"n_var", "tabindex"=>"17");
+						echo $ctrlFrm->formSelect('n_var', trim($n_var), $c_thnAjaranAtrib, $thnAjaranList);*/
+	
+						echo '<input type="text" class="text"  name="n_var" id="n_var" value="'.trim($n_var).'" size="10" maxlength="500"/>';
+						
+						}
+						if ($c_var=='smt_curr'){
+												$c_semester_List = array(
+																		""=>"--Pilih--",
+																		"1"=>"Ganjil",
+																		"2"=>"Genap");
+												echo $ctrlFrm->formSelect('n_var', $n_var, null, $c_semester_List);
+						}
+						
+						if ($c_var=='tglawalkrs'){						
+											
+						?>
+<script type="text/javascript">
+	$(function() {
+		$("#n_var").datepicker();
+	});
+</script> 							
+						<?
+						echo '<input type="text" readonly="true" name="n_var" id="n_var" size="10" value="'.trim($n_var).'" >';	
+						}
+						if ($c_var=='tglakhirkrs'){
+						?>
+<script type="text/javascript">
+	$(function() {
+		$("#n_var").datepicker();
+	});
+</script> 							
+						<?						
+						echo '<input type="text" readonly="true" name="n_var" id="n_var" size="10" value="'.trim($n_var).'" >';}
+						if ($c_var=='tglawalisidatamhs'){
+						?>
+<script type="text/javascript">
+	$(function() {
+		$("#n_var").datepicker();
+	});
+</script> 							
+						<?						
+						echo '<input type="text" readonly="true" name="n_var" id="n_var" size="10" value="'.trim($n_var).'" >';}
+						if ($c_var=='tglakhirisidatamhs'){
+						?>
+<script type="text/javascript">
+	$(function() {
+		$("#n_var").datepicker();
+	});
+</script> 							
+						<?						
+						echo '<input type="text" readonly="true" name="n_var" id="n_var" size="10" value="'.trim($n_var).'" >';}							
+						?>						
+						
+					</td>
+				</tr>				
+			</table>	
+	    
+				<div class="right">
+					<input type="button" onclick="open_url_to_div('<?php echo $this->basePath; ?>/adm/variabel/variabellist','<?php echo $this->basePath; ?>/adm/variabel/variabeljs');" value="Batal"/>&nbsp;
+					<?if($par=='ubah'){$par='Ubah';}else{$par='Simpan';}?>
+					<input   name="perintah" id="perintah" type="submit" style="font-weight: bold;" class="button2" value="<?=ucwords($par)?>">
+				</div>
+		</fieldset>
+</form>

@@ -1,0 +1,72 @@
+function carigroupuser()
+{
+	$("#frmcarigroupuser").ajaxForm(frmcarigroupuser_opt);
+}
+var frmcarigroupuser_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/adm/groupuser/groupuserlist',
+		type: 'post', 
+		resetForm: false
+};
+function groupuserlist()
+{
+	var url = '<?php echo $this->basePath; ?>/adm/groupuser/groupuserlist';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function groupuserForm(jenisForm, id)
+{
+	var url = '<?php echo $this->basePath; ?>/adm/groupuser/groupuserolahdata';
+	var param = { jenisForm:jenisForm, id:id};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahgroupuser").ajaxForm(tambahGroupuser_opt);
+		jQuery("#frmubahgroupuser").ajaxForm(ubahGroupuser_opt);
+	});
+}
+
+var tambahGroupuser_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/groupuser/groupuser',
+	beforeSubmit : function() {
+		if (document.getElementById('n_nama').value == ''){
+			alert('Group user harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahGroupuser_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/groupuser/groupuserupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('n_nama').value == ''){
+			alert('Groupuser harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function groupuserHapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/adm/groupuser/groupuserhapus';
+		var opt = {id : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  

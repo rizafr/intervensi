@@ -1,0 +1,95 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function cariKota(){
+	$("#frmCariKota").ajaxForm(frmCariKota_opt);
+}
+
+var frmCariKota_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/kota/kota/kotamenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function kotaMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/kota/kota/kotamenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function kotaForm(jenisForm, kode_kota)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/kota/kota/kotaolahdata';
+	
+	var param = { jenisForm:jenisForm, kode_kota:kode_kota};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkota").ajaxForm(tambahKota_opt);
+		jQuery("#frmubahkota").ajaxForm(ubahKota_opt);		
+		});
+	
+}
+
+var tambahKota_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kota/kota/simpankota',
+	beforeSubmit : function() {
+		if (document.getElementById('kode_kota').value == ''){
+			alert('Kode Kota harus Diisi');
+			return false;
+		}
+		if (document.getElementById('kota').value == ''){
+			// alert('Nama Kota harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKota_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kota/kota/simpankotaedit',
+	beforeSubmit : function() {
+		if (document.getElementById('kode_kota').value == ''){
+			alert('Kode Kota harus Diisi');
+			return false;
+		}
+		if (document.getElementById('kota').value == ''){
+			// alert('Nama Kota harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Kotahapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/kota/kota/kotahapus';
+		var opt = {kode_kota : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

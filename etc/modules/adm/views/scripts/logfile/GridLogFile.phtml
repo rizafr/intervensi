@@ -1,0 +1,78 @@
+<?php
+
+define("_VALID", 1);
+
+require_once('DataSource.php');
+require_once('files.php');
+
+class GridLogFile extends DataSource{
+	public function __construct(){
+		parent::__construct();
+	}
+	protected function InitArray(){	
+		
+		if($_REQUEST['file']==''){
+			$logpath = "log/";
+			$files = new files;
+			$dirContent = $files->read_dir($logpath,array('txt'));
+		
+			for($x=0; $x<count($dirContent); $x++){
+				$files2 = new files;
+				$files2->set_files($logpath.$dirContent[$x]);
+				$isifile[] = $files2->read_line_by_line();
+				unset($files2);
+			}
+		
+			//return 
+			$data = $this->setIsiFileToGrid($isifile);
+		}
+
+		else{	
+			$files2 = new files;
+			$files2->set_files($_REQUEST['file']);
+			$isifile[] = $files2->read_line_by_line();
+			unset($files2);
+			$data = $this->setIsiFileToGrid($isifile);
+		}
+		return $data;
+		
+	}
+	
+	private function setIsiFileToGrid($arrIsiFile){
+		$data = array();
+		for($x=0; $x<count($arrIsiFile); $x++){
+			for($y=0; $y<count($arrIsiFile[$x])-1; $y++){				
+				$filecontent = $this->FetchLine($arrIsiFile[$x][$y]);
+				array_push($data, $filecontent);
+			}
+		}
+		return $data;		
+	}
+	
+	private function FetchLine($content){
+		$arr = explode(";",$content);
+		return array(
+			"username" => $arr[0],
+			"aksi" => $arr[1],
+			"time" => $arr[2],
+			"message" => $arr[3]
+		);
+	}
+			
+	## Setting Link Edit Variabel
+	protected function SetLinkEditVariabel(){
+		$this->PrefixEditLink = 'index.php?mod=nsw&act=warehouse&IdEdit=';
+		$this->KeyIdEditFromQuery = 'ID_WAREHOUSE';	
+	}
+	
+	## Setting Link Delete Variabel
+	protected function SetLinkDeleteVariabel(){
+		$this->PrefixDeleteLink = 'index.php?mod=nsw&act=warehouse&IdDelete=';
+		$this->KeyIdDeleteFromQuery = 'ID_WAREHOUSE';	
+	}
+		
+}
+
+new GridLogFile();
+
+?>

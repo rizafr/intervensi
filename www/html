@@ -1,0 +1,47 @@
+
+<html><body>
+		
+<table width="550" height ="350" border="1" align="left" cellpadding="1" cellspacing="1" valign ="top">
+<tr>
+<td>
+<table width="540">
+      <tr >
+		<td>
+			<table><tr>		
+				<td align="left" width="20">
+					<img  src="http://poltekpos/images/logo.jpg" width="90" height="80" />
+				</td>
+				<td >
+					<font size="3" face="arial">POLITEKNIK POS INDONESIA</font>
+				</td></tr>
+			</table>
+		</td>
+	</tr>
+      <tr >
+   		<td align="left"  height ="50" valign="top">
+				<table height ="50" width="100%">
+					<tr>
+						<td width="70%">
+							<font size="2" face="arial">ACHMAD FAUZIAN RAHMAN <br>1103002<br>Teknik Informatika</font>
+						</td>
+
+						<td width="30%" align="right">
+							<img  src="http://poltekpos/images/nophoto.jpg" width="90" height="80" />
+						</td>
+					</tr>
+				</table>
+
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+
+
+
+			
+
+
+			</body>
+			</html>

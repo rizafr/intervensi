@@ -1,0 +1,72 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+$ctrlFrm = new Zend_View();
+?>
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Tambah Data Kabupaten</h2>
+	    <div class="spacer"></div> 
+		
+		<? if(strtolower($this->jenisForm) == 'insert') {	$namaForm = 'frmtambahkabupaten'; }
+			else if (strtolower($this->jenisForm) == 'update') {	$namaForm = 'frmubahkabupaten'; }
+			else {	$namaForm = 'frmhapuskabupaten'; }
+		
+		?>
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+				<tr>
+				    <td align="right" width="180">* Kabupaten :</td>
+					<td>
+						<?
+						$n_kabAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('n_kab', $this->detailKabupaten['n_kab'], $n_kabAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Propinsi :</td>
+					<td>
+						<?
+						$n_kabAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('n_kab', $this->detailKabupaten['id_prop'], $n_kabAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Kode :</td>
+					<td>
+						<?
+						$c_kabAttrib = array("size" => 14,"maxlength" => 14);
+						echo $ctrlFrm->formText('c_kab', $this->detailKabupaten['c_kab'], $c_kabAttrib);
+						?>
+						
+					</td>
+				</tr>
+				
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="kabupatenlist();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

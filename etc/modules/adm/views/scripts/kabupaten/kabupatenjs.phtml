@@ -1,0 +1,80 @@
+function carikabupaten()
+{
+	$("#frmcarikabupaten").ajaxForm(frmcarikabupaten_opt);
+}
+var frmcarikabupaten_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/adm/kabupaten/kabupatenlist',
+		type: 'post', 
+		resetForm: false
+};
+function kabupatenlist()
+{
+	var url = '<?php echo $this->basePath; ?>/adm/kabupaten/kabupatenlist';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function kabupatenForm(jenisForm, id)
+{
+	var url = '<?php echo $this->basePath; ?>/adm/kabupaten/kabupatenolahdata';
+	var param = { jenisForm:jenisForm, id:id};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkabupaten").ajaxForm(tambahKabupaten_opt);
+		jQuery("#frmubahkabupaten").ajaxForm(ubahKabupaten_opt);
+	});
+}
+
+var tambahKabupaten_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/kabupaten/kabupaten',
+	beforeSubmit : function() {
+		if (document.getElementById('c_kab').value == ''){
+			alert('Sandi Kabupaten harus Diisi');
+			return false;
+		}
+		if (document.getElementById('n_kab').value == ''){
+			alert('Nama Kabupaten harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKabupaten_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/kabupaten/kabupatenupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('c_kab').value == ''){
+			alert('Group Kabupaten harus Diisi');
+			return false;
+		}
+		if (document.getElementById('n_kab').value == ''){
+			alert('Nama Kabupaten harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function kabupatenHapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/adm/kabupaten/kabupatenhapus';
+		var opt = {id : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  

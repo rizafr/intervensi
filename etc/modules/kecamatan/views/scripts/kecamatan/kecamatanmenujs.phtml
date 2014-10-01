@@ -1,0 +1,95 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function cariKecamatan(){
+	$("#frmCariKecamatan").ajaxForm(frmCariKecamatan_opt);
+}
+
+var frmCariKecamatan_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/kecamatan/kecamatan/kecamatanmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function kecamatanMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/kecamatan/kecamatan/kecamatanmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function kecamatanForm(jenisForm, kode_kecamatan)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/kecamatan/kecamatan/kecamatanolahdata';
+	
+	var param = { jenisForm:jenisForm, kode_kecamatan:kode_kecamatan};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkecamatan").ajaxForm(tambahKecamatan_opt);
+		jQuery("#frmubahkecamatan").ajaxForm(ubahKecamatan_opt);		
+		});
+	
+}
+
+var tambahKecamatan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kecamatan/kecamatan/simpankecamatan',
+	beforeSubmit : function() {
+			if (document.getElementById('kode_kecamatan').value == ''){
+			alert('Kode Kecamatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('nama_kecamatan').value == ''){
+			alert('Nama Kecamatan harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKecamatan_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/kecamatan/kecamatan/simpankecamatanedit',
+	beforeSubmit : function() {
+		if (document.getElementById('kode_kecamatan').value == ''){
+			alert('Kode Kecamatan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('nama_kecamatan').value == ''){
+			alert('Nama Kecamatan harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Kecamatanhapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/kecamatan/kecamatan/kecamatanhapus';
+		var opt = {kode_kecamatan : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

@@ -1,0 +1,125 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function pilihInstansi(){
+	Instansi = document.getElementById('Instansi').value;
+	jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/pengguna/pengguna/penggunaolahdata';
+	var param = {Instansi:Instansi,jenisForm:jenisForm};
+}
+
+function cariPengguna(){
+	$("#frmCariPengguna").ajaxForm(frmCariPengguna_opt);
+}
+
+var frmCariPengguna_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/pengguna/pengguna/penggunamenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function penggunaMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/pengguna/pengguna/penggunamenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function penggunaForm(jenisForm, id)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/pengguna/pengguna/penggunaolahdata';
+	
+	var param = { jenisForm:jenisForm, id:id};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahpengguna").ajaxForm(tambahPengguna_opt);
+		jQuery("#frmubahpengguna").ajaxForm(ubahPengguna_opt);		
+		});
+	
+}
+
+var tambahPengguna_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/pengguna/pengguna/simpanpengguna',
+	beforeSubmit : function() {	
+		var textPengguna = document.getElementById("pengguna");
+		var minpengguna = textPengguna.value.length;
+		var textPass= document.getElementById("password");
+		var minpass = textPass.value.length;
+		if (minpengguna < 3){
+			alert('Pengguna harus diisi minimal 3 karakter');
+			return false;
+		}
+		if (minpass < 3){
+			alert('Password harus diisi minimal 3 karakter');
+			return false;
+		}
+		var e = document.getElementById("KodeInstansi");
+		var strUser = e.options[e.selectedIndex].value;
+		if(strUser=='-')
+		{
+			alert('Instansi harus Diisi');
+			return false;
+		}
+		if (document.getElementById('level').value == ''){
+			 alert('Level harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahPengguna_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/pengguna/pengguna/simpanpenggunaedit',
+	beforeSubmit : function() {
+		if (document.getElementById('pengguna').value == ''){
+			alert('Pengguna harus Diisi');
+			return false;
+		}
+		if (document.getElementById('password').value == ''){
+			 alert('Password harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeInstansi').value == ''){
+			 alert('Kode Instansi harus Diisi');
+			return false;
+		}
+		if (document.getElementById('level').value == ''){
+			 alert('Level harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Penggunahapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/pengguna/pengguna/penggunahapus';
+		var opt = {id : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

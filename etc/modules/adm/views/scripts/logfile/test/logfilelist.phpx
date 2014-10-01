@@ -1,0 +1,231 @@
+<!-- YUI Library -->
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath; ?>/js/yui/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath; ?>/js/yui/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath; ?>/js/yui/datatable/assets/skins/sam/datatable.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath; ?>/js/yui/tabview/assets/skins/sam/tabview.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath; ?>/js/yui/button/assets/skins/sam/button.css" />
+
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/element/element-beta-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/json/json.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/json/json-debug.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/yui/button/button-min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath; ?>/js/easySlider.packed.js"></script>
+<!-- End Of YUI Library -->
+
+<script language="javascript">
+
+function DisplayGridSource(dateLog){
+
+//alert("sjkfhdjsdf");
+	
+YAHOO.example.DynamicData = function() {
+    // Column definitions
+    var myColumnDefs = [ // sortable:true enables sorting       
+		{key:"No", label:"No", sortable:false},
+		{key:"username", label:"Username", sortable:true},
+		{key:"aksi", label:"Aksi", sortable:true},
+		{key:"time", label:"Waktu", sortable:true},
+		{key:"message", label:"Pesan", sortable:true}
+		
+    ];
+
+    // Custom parser
+    var stringToDate = function(sData) {
+        var array = sData.split("-");
+        return new Date(array[1] + " " + array[0] + ", " + array[2]);
+    };
+    
+    // DataSource instance
+	
+	
+	/*
+	if(FilterKolomAdvance == "StatusTanggal"){
+		UrlAdd = ;
+	}
+	*/
+	
+    var myDataSource = new YAHOO.util.DataSource("<?php echo $this->basePath; ?>/adm/logfile/GridLogFile?file="+dateLog+"&");
+    myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+    myDataSource.responseSchema = {
+        resultsList: "records",
+        fields: [
+			{key:"No"},
+			{key:"username"},
+			{key:"aksi"},
+			{key:"time"},
+			{key:"message"}
+        ],
+        metaFields: {
+            totalRecords: "totalRecords" // Access to value in the server response
+        }
+    };
+    
+    // DataTable configuration
+    var myConfigs = {
+        initialRequest: "sort=username&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+        dynamicData: true, // Enables dynamic server-driven data
+        sortedBy : {key:"username", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+        paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination 
+    };
+    
+    // DataTable instance
+    var myDataTable = new YAHOO.widget.DataTable("DataGridSource", myColumnDefs, myDataSource, myConfigs);
+    // Update totalRecords on the fly with value from server
+    myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+        oPayload.totalRecords = oResponse.meta.totalRecords;
+        return oPayload;
+    }
+    
+    return {
+        ds: myDataSource,
+        dt: myDataTable
+    };
+        
+}();
+
+}
+
+
+
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){	
+		$("#slider").easySlider({
+			prevText:'UP',
+			nextText:'DOWN',
+			orientation:'vertical'
+		});
+	});
+</script>
+<style>
+h1{
+	font-size:180%;
+	font-weight:normal;
+	}
+h2{
+	font-size:160%;
+	font-weight:normal;
+	}	
+h3{
+	font-size:140%;
+	font-weight:normal;
+	}	
+img{border:none;}
+pre{
+	display:block;
+	font:12px "Courier New", Courier, monospace;
+	text-decoration:none;
+	padding:10px;
+	border:1px solid #bae2f0;
+	background:#e3f4f9;	
+	margin:.5em 0;
+	width:500px;
+	}		
+
+/* Easy Slider */
+
+	#slider ul, #slider li{
+		margin:0;
+		padding:0;
+		list-style:none;
+		}
+	#slider, #slider li{ 
+		/* 
+			define width and height of container element and list item (slide)
+			list items must be the same size as the slider area
+		*/ 
+		width:850px;
+		height:140px;
+		overflow:hidden; 		
+		}
+	#slider li{ 
+		background:#fff;		
+		}		
+	#slider li h2{ 
+		margin:0 20px;
+		padding-top:20px;
+		}	
+	#slider li p{ 
+		margin:20px;
+		}				
+	span#prevBtn{}
+	span#nextBtn{}					
+
+/* // Easy Slider */
+	
+	.divLog{
+		padding-left:9px;
+		display:inline;
+		text-align:center;
+		margin-right:5px;
+	}
+	.boxSlide{
+		margin-top:2px;
+		margin-left:2px;
+		padding:10px;
+		width:825px;
+		height:115px;
+		border:1px solid #B1C6CB;
+	}
+
+/* // Easy Slider */
+
+</style>
+<!-- 	<div id="container"> -->
+		<div id="navigasi">
+			<div class="item">&nbsp;Home&nbsp;</div>
+			&nbsp;<div class="item">&gt;&gt;</div>&nbsp;		
+			<div class="item">&nbsp;Log File&nbsp;</div>
+		</div>
+		<br />
+		<div id="container"> 
+				
+<div id="slider">
+		<ul>				
+		<?  
+			//var_dump($JmlBaris);
+			$JmlKolom = 10;
+			$JmlBaris = ceil(count($log)/$JmlKolom);
+			for($x=0; $x<$JmlBaris; $x++ ){
+			
+		?>		
+			<li>
+				<div class="boxSlide">
+				<div>
+					<br />
+					<? 				
+					for($z=0; $z<$JmlKolom; $z++ ){ 
+						$index = ($x*$JmlKolom) + $z;
+						if(isset($log[$index])){
+					?>
+					<div class="divLog"><a href="javascript:DisplayGridSource('<?=$logLink[$index];?>')"><img src="<?php echo $this->basePath; ?>images/txt_64.png" /></a></div>
+					<? } } ?>
+				</div>
+				<div>
+					<? 				
+					for($z=0; $z<$JmlKolom; $z++ ){ 
+						$index = ($x*$JmlKolom) + $z;
+						if(isset($log[$index])){
+					?>				
+					<div class="divLog"><?=$log[$index];?></div>
+					<? } } ?>
+				</div>								
+				</div>
+			</li>	
+			<? } ?>														
+		</ul>
+	</div>		
+			<br /><br />	
+			<div id="DataGridSource"></div>			
+		</div>
+		<!-- <div class="button-add"><input type="button" class="button" value="Tambah Data" /></div> -->
+		
+<!--	</div>	 -->
+<script language="javascript">DisplayGridSource('<?=$dateLog;?>');</script>

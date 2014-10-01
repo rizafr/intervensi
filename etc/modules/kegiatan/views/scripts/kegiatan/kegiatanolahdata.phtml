@@ -1,0 +1,209 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+$format_date= new format_date();
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahkegiatan'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahkegiatan';  
+		$jenisAksi = 'Ubah';
+		}	
+	  else {	
+	        $namaForm = 'frmhapuskegiatan';  
+			$jenisAksi = 'Hapus';
+		}
+		
+		echo $ctrlFrm->formHidden('jenisForm', $this->jenisForm, null);
+		$tgl=date("Ymds");
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Kegiatan</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>" accept-charset=utf-8>
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">				
+				<tr>
+				    <td align="right" width="180">* Kode Kegiatan :</td>
+					<td>						
+						<?						
+							$KodeKegiatanAttrib = array("readonly" => "true","size" => 50,"maxlength" => 50);
+							echo $ctrlFrm->formText('KodeKegiatan', $this->kegiatanMenu['KodeKegiatan'], $KodeKegiatanAttrib);
+											
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Nama Kegiatan :</td>
+					<td>						
+						<?
+						$NamaKegiatanAttrib = array("size" => 50,"maxlength" => 50);
+					
+							echo $ctrlFrm->formText('NamaKegiatan', $this->kegiatanMenu['NamaKegiatan'], $NamaKegiatanAttrib);
+										
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Jadwal Mulai Kegiatan :</td>
+					<td>
+										
+						<?
+						$JadwalAwalAttrib = array("id"=>"JadwalAwal", "size" => 50,"maxlength" => 50);
+						
+							echo $ctrlFrm->formText('JadwalAwal', $this->kegiatanMenu['JadwalAwal'], $JadwalAwalAttrib);
+						
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Jadwal Akhir Kegiatan :</td>
+					<td>
+						
+						<?
+							$JadwalAkhirAttrib = array("id"=>"JadwalAkhir", "size" => 50,"maxlength" => 50);					
+							echo $ctrlFrm->formText('JadwalAkhir', $this->kegiatanMenu['JadwalAkhir'], $JadwalAkhirAttrib);						
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Instansi :</td>
+					<td>	
+						<?
+						
+						if($this->KodeInstansi == 0){ //admin
+							$jmlInstansiList = count($this->instansiList);
+							$instansiList['-'] = '--Pilih--';
+							for ($i = 0; $i < $jmlInstansiList; $i++) {
+								$instansiList[$this->instansiList[$i]->KodeInstansi] = (string)$this->instansiList[$i]->Instansi;			 
+							}	
+							$instansiAtrib = array("id"=>"KodeInstansi", "tabindex"=>"17", "onchange"=>"javascript:pilihInstansi();");																				
+							echo $ctrlFrm->formSelect('KodeInstansi', $this->kegiatanMenu['KodeInstansi'], $instansiAtrib, $instansiList);
+						
+							
+						}else{ //pengunjung					
+							if($jenisAksi == "Ubah"){
+								$instansiAttrib = array("id"=>"KodeInstansi", "size" => 100,"maxlength" => 100,"readonly"=>"true");	
+							}else if($jenisAksi == "Tambah"){
+								$instansiAttrib = array("id"=>"KodeInstansi", "size" => 100,"maxlength" => 100,"readonly"=>"true");	
+							}											
+							echo $ctrlFrm->formText('Instansi', $this->Instansi['Instansi'], $instansiAttrib);	
+							echo $ctrlFrm->formHidden('KodeInstansi', $this->Instansi['KodeInstansi'], $instansiAttrib);	
+						}			
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Kode Komponen :</td>
+					<td>						
+						<?
+						$jmlKomponenList = count($this->komponenList);
+						$komponenList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlKomponenList; $i++) {
+						    $komponenList[$this->komponenList[$i]->KodeKomponen] = (string)$this->komponenList[$i]->Komponen;	 
+						}						
+						
+							$komponenAtrib = array("id"=>"KodeKomponen", "tabindex"=>"17", "onChange"=>"pilihKomponen();");
+							echo $ctrlFrm->formSelect('KodeKomponen', $this->kegiatanMenu['KodeKomponen'], $komponenAtrib, $komponenList);
+						
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Kode Sub Komponen :</td>
+					<td>						
+						<?
+						$jmlSubKomponenList = count($this->subKomponenList);
+						$subKomponenList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlSubKomponenList; $i++) {
+						    $subKomponenList[$this->subKomponenList[$i]->KodeSubKomponen] = (string)$this->subKomponenList[$i]->SubKomponen;			 
+						}						
+						if($jenisAksi == "Ubah"){							 
+							$subKomponenAtrib = array("id"=>"KodeSubKomponen", "tabindex"=>"17", "onchange"=>"javascript:pilihSubKomponen();");							
+						}else{
+							$subKomponenAtrib = array("id"=>"KodeSubKomponen", "tabindex"=>"17", "onchange"=>"javascript:pilihSubKomponen();");
+						}
+						echo $ctrlFrm->formSelect('KodeSubKomponen', $this->kegiatanMenu['KodeSubKomponen'], $subKomponenAtrib, $subKomponenList);
+
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Kode Detail Sub Komponen:</td>
+					<td>
+						<?
+						$jmlSubKomponenDetailList = count($this->subKomponenDetailList);
+						$subKomponenDetailList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlSubKomponenDetailList; $i++) {
+						    $subKomponenDetailList[$this->subKomponenDetailList[$i]->KodeDetailSubKomponen] = (string)$this->subKomponenDetailList[$i]->SubKomponenDetail;			 
+						}
+						if($jenisAksi == "Ubah"){
+							$subKomponenDetailAtrib = array("id"=>"KodeDetailSubKomponen", "tabindex"=>"17");
+							
+						}else{
+							$subKomponenDetailAtrib = array("id"=>"KodeDetailSubKomponen", "tabindex"=>"17", "onchange"=>"javascript:generateKodeKegiatan($tgl);");
+							
+						}
+						echo $ctrlFrm->formSelect('KodeDetailSubKomponen', $this->kegiatanMenu['KodeDetailSubKomponen'], $subKomponenDetailAtrib, $subKomponenDetailList);
+						?>
+						
+					</td>
+				</tr>
+				 <tr>
+				    <td align="right" width="180">* Anggaran :</td>
+					<td>
+						<?
+							$AnggaranAttrib = array("placeholder"=>"Misal. 5000000", "onkeypress"=>"javascript:return isNumber(event)","size" => 50,"maxlength" => 15);
+							
+								echo $ctrlFrm->formText('Anggaran', $this->kegiatanMenu['Anggaran'], $AnggaranAttrib);
+						
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="kegiatanMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script>
+ $(function() {
+	$( "#JadwalAwal" ).datepicker({
+	  changeMonth: true,
+	  dateFormat: 'yy-mm-dd'
+	});
+
+	$( "#JadwalAkhir" ).datepicker({
+		 defaultDate: "+1w",
+		changeMonth: true,		 
+		 dateFormat: 'yy-mm-dd'
+	});
+});
+</script>

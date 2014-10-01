@@ -1,0 +1,171 @@
+<?php
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once 'share/format_page.php';
+require_once "share/share_message.php";
+require_once "share/oa_dec_cur_conv.php";
+require_once "kegiatanmenujs.phtml";
+$referensi = Menu_Service::getInstance();
+$referensi = Kegiatan_Service::getInstance();
+
+$ctrlFrm = new Zend_View();
+$pesan = new share_message();
+$halaman = new format_page();
+$dec_cur = new oa_dec_cur_conv();
+		
+$currentPage = $this->currentPage;
+$numToDisplay = $this->numToDisplay;
+
+					
+			
+?>
+
+<div class="navlink">
+<a href="#" onClick="kegiatanMenu();" class="kembali"> Kembali </a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"></span>
+		<h2 class="title">Daftar Penerima</h2>
+		<div class="search-panel">
+			<form method="post" id="frmCariPenerima" name="frmCariPenerima">Kata Kunci :
+					
+				<?
+				echo $ctrlFrm->formHidden('KodeKegiatan', $this->KodeKegiatan, null);	
+				$kategoriCari = array("p.NamaLengkap" => "Nama Lengkap",  "p.NIK" => "NIK");
+										
+				echo $ctrlFrm->formSelect('kategoriCari', $this->kategoriCari, null, $kategoriCari);						
+				?>
+				<input type="text" name="carii">
+				<?
+			         $atribSubmit = array("onclick"=>"javascript:cariPenerima();");
+			         echo $ctrlFrm->formSubmit('cari', 'Search', $atribSubmit)."&nbsp;";
+				?>
+			</form>
+		</div>
+		<div class="space-line"></div>		
+		<fieldset class="fields"> 
+			<div class="spacer"> </div>
+			<? 
+			
+				
+			$status = $this->hasil;
+			$proses = $this->proses;
+			$keterangan = $this->keterangan;
+			
+			$pesan->show_message($proses, $keterangan, "$status" ); ?>
+			<div class="spacer"> </div>	
+			
+			<?php
+				if (count($this->penerimaMenu2) == 0){
+					
+				}else{
+					foreach ($this->penerimaMenu2 as $val):
+					$KodeKegiatan = $this->escape($val['KodeKegiatan']); 
+					$NamaKegiatan = $this->escape($val['NamaKegiatan']); 
+					$JadwalAwal = $this->escape($val['JadwalAwal']); 				
+					$JadwalAkhir = $this->escape($val['JadwalAkhir']); 										
+					$Anggaran = $this->escape($val['Anggaran']); 	
+					
+					$JadwalAwal=date("d M Y", strtotime($JadwalAwal));
+					$JadwalAkhir=date("d M Y", strtotime($JadwalAkhir));
+					
+					endforeach;
+				}
+				echo $ctrlFrm->formHidden('KodeKegiatan', $KodeKegiatan, null);	
+				
+			?>
+			<div class="info">
+				<table>
+					<tr>
+						<td>Kode Kegiatan</td>
+						<td>:</td>
+						<td><? echo $KodeKegiatan;?></td>
+					</tr>
+					<tr>
+						<td>Kegiatan</td>
+						<td>:</td>
+						<td><? echo $NamaKegiatan;?></td>
+					</tr>
+					<tr>
+						<td>Pelaksanaan</td>
+						<td>:</td>
+						<td><? echo $JadwalAwal;?> s.d <? echo $JadwalAkhir;?></td>
+					</tr>
+					<tr>
+						<td>Anggaran</td>
+						<td>:</td>
+						<td>Rp. <? echo number_format($Anggaran, 2, ',', '.');?></td>
+					</tr>
+				</table>
+			</div>
+			<input type="hidden" id="KodeKegiatan" name="KodeKegiatan" value="<?php echo $this->KodeKegiatan?>">			
+			<div class="add" title="Tambah Data" onClick="OlahDataForm('insert','','<? echo $KodeKegiatan;?>','<? echo $NamaKegiatan;?>');"></div> 
+			<div class="blank"></div>			
+			
+			<table id="sorter" class="sortable" cellspacing="1" cellpadding="2" border="0" align="center">
+				<th width=2.5%  class="nosort">No</th> 
+				<th width=7.5% class="sorted order2 sortable">NIK</th> 
+				<th width=17.5% class="sorted order2 sortable">Nama</th> 
+				<th width=15% class="sorted order2 sortable">Alamat</th> 
+				<th width=10% class="sorted order2 sortable">Status</th> 
+				<th width=7.5% class="sorted order2 sortable">Kelurahan</th> 
+				<th width=5% class="sorted order2 sortable">Keterangan</th> 
+				<th width=5% colspan="3"  class="nosort">Tindakan</th>
+				
+				<?php
+					if (count($this->penerimaMenu) == 0){ 
+				?>
+					<tr class="event2"><td colspan="8"><font color="red">Data Belum Ada</font></td></tr>
+				<?} else {					
+					foreach ($this->penerimaMenu as $key => $val): 
+					if ($key%2==0) { ?>
+						<tr class="event">
+					<? } else if ($key%2==1) { ?>
+						<tr class="event2">
+					<? } 
+					
+					$IdPendaftaran = $this->escape($val['IdPendaftaran']); 
+					$NIK = $this->escape($val['NIK']); 
+					$NamaLengkap = $this->escape($val['NamaLengkap']); 
+					$Alamat = $this->escape($val['Alamat']); 				
+					$Status = $this->escape($val['Status']); 				
+					$Kelurahan = $this->escape($val['Kelurahan']); 				
+					$KodeKegiatan = $this->escape($val['KodeKegiatan']); 		
+					$Ket = $this->escape($val['Ket']); 		
+					$noUrut = (($currentPage -1)* $numToDisplay) + $key +1;		
+					?>
+					
+					<input type="hidden" id="IdPendaftaran" name="IdPendaftaran" value="<?php echo $IdPendaftaran?>">
+					
+					<td class="clright"><? echo $noUrut;?>&nbsp;&nbsp;</td>
+					<td class="clleft">&nbsp;<? echo $NIK;?></td>
+					<td class="clleft">&nbsp;<? echo $NamaLengkap;?></td>
+					<td class="clleft">&nbsp;<? echo $Alamat;?></td>										
+					<td class="clleft">&nbsp;<? echo $Status;?></td>										
+					<td class="clleft">&nbsp;<? echo $Kelurahan;?></td>										
+					<td class="clleft">&nbsp;<? echo $Ket;?></td>				
+					<td><div onClick="OlahDataForm('update','<? echo $NIK;?>','<? echo $KodeKegiatan;?>','');" class="edit" title="Ubah Data"></div></td>
+					<td><div class="delete" title="Hapus Data" onClick="Penerimahapus('NIK', '<? echo $NIK; ?>','<? echo $KodeKegiatan;?>','')" ></td>
+					</tr>
+					<?
+					endforeach;
+				}
+				?>
+			</table>
+			<?	
+			
+			
+			$totalData = $this->totKegiatan;
+			$modul = $this->basePath."/kegiatan/kegiatan/penerimamenu";			
+			echo $halaman->showPage($totalData, $numToDisplay, $currentPage, 'tableview', $modul, $param1, $param2, $param3, $param4);		
+			?>
+		</fieldset>		 
+		
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>

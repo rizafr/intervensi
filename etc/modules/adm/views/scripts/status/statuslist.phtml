@@ -1,0 +1,110 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once 'share/format_page.php';
+require_once "share/share_message.php";
+require_once "share/oa_dec_cur_conv.php";
+
+$ctrlFrm = new Zend_View();
+$pesan = new share_message();
+$halaman = new format_page();
+$dec_cur = new oa_dec_cur_conv();
+
+$currentPage = $this->currentPage;
+$numToDisplay = $this->numToDisplay;
+
+?>
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Status</h2>
+		<div class="search-panel">
+			<form method="post" id="frmcaristatus" name="frmcaristatus">Kata Kunci :
+				<input type="text" name="carii">
+				<?
+			         $atribSubmit = array("onclick"=>"javascript:caristatus();");
+			         echo $ctrlFrm->formSubmit('cari', 'Search', $atribSubmit)."&nbsp;";
+				?>
+			</form>
+		</div>
+		<div class="space-line"></div>
+
+		
+		<fieldset class="fields"> 
+			<div class="spacer"> </div>
+			<? 
+			
+			$status = $this->hasil;
+			$proses = $this->proses;
+			$keterangan = $this->keterangan;
+			
+			$pesan->show_message($proses, $keterangan, "$status" ); ?>
+			<div class="spacer"> </div>	
+			
+			<div class="add" title="Tambah Data" onClick="statusForm('insert','');"></div> 
+
+			<div class="blank"></div>
+			
+			
+			<table id="sorter" class="sortable" cellspacing="1" cellpadding="2" border="0" align="center">
+				<th width=5% class="nosort">No</th> 
+				<th width=10%>Kode Status</th>
+				<th width=75% class="sorted order2 sortable">Status</th> 
+				<th width=10% colspan="2"  class="nosort">Tindakan</th>
+				
+				<?
+				if (count($this->statusList) == 0){ 
+				?>
+					<tr class="event2"><td colspan="5"><font color="red">Data Tidak Ditemukan</font></td></tr>
+				<?} else {
+						
+						
+						foreach ($this->statusList as $key => $val): 
+						if ($key%2==0) { ?>
+							<tr class="event">
+						<? } else if ($key%2==1) { ?>
+							<tr class="event2">
+						<? } 
+						$kd_status = $this->escape($val['kd_status']); 
+						$nm_status = $this->escape($val['nm_status']); 
+						$cStatusaktif = $this->escape($val['c_statusaktif']);
+						$noUrut = (($currentPage -1)* $numToDisplay) + $key +1;
+						
+						// form Hidden 
+						echo $ctrlFrm->formHidden('kd_status', $kd_status, null);
+						
+						?>
+						
+						<td class="clcenter"><? echo $noUrut;?>&nbsp;&nbsp;</td>
+						<td class="clcenter">&nbsp;<? echo $kd_status;?></td>
+						<td class="clleft">&nbsp;<? echo $nm_status;?></td>
+						
+						<td><div onClick="statusForm('update','<? echo $kd_status;?>');" class="edit" title="Ubah Data"></div></td>
+						<td><div class="delete" title="Hapus Data" onClick="statusHapus('Status', '<? echo $kd_status; ?>')" ></td>
+						
+					
+						</tr>
+					<?
+					endforeach;
+				}
+				?>
+			</table>
+
+			<?	
+			$totalData = $this->totStatusList;
+			$fungsi = 'statuslist';
+			$modul = $this->basePath."/adm/status/statuslist";
+			echo $halaman->showPage($totalData, $numToDisplay, $currentPage, 'tableview', $modul, $param1, $param2, $param3, $param4);	
+			?>
+		</fieldset>		 
+		
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>

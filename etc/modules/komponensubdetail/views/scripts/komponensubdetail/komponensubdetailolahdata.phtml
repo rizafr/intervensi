@@ -1,0 +1,137 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+require_once "komponensubdetailmenujs.phtml";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahkomponensubdetail'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahkomponensubdetail';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuskomponensubdetail';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Komponen Sub Detail</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">				
+				<tr>
+				    <td align="right" width="180">* Kode Komponen Sub Detail :</td>
+					<td>
+						<?
+						if($jenisAksi == "Ubah"){
+							$KodeDetailSubKomponenAttrib = array("readonly" => "true","size" => 50,"maxlength" => 50);
+						}else{
+							$KodeDetailSubKomponenAttrib = array("size" => 50,"maxlength" => 50);
+						}
+						echo $ctrlFrm->formText('KodeDetailSubKomponen', $this->komponenSubDetailMenu['KodeDetailSubKomponen'], $KodeDetailSubKomponenAttrib);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Sub Komponen Detail :</td>
+					<td>
+						<?
+						$SatuanAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('SubKomponenDetail', $this->komponenSubDetailMenu['SubKomponenDetail'], $Satuan);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Satuan :</td>
+					<td>
+						<?
+						$SatuanAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('Satuan', $this->komponenSubDetailMenu['Satuan'], $Satuan);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Kode Sub Komponen :</td>
+					<td>
+						<?
+						$jmlSubKomponenList = count($this->subKomponenList);
+						$subKomponenList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlSubKomponenList; $i++) {
+						    $subKomponenList[$this->subKomponenList[$i]->KodeSubKomponen] = (string)$this->subKomponenList[$i]->SubKomponen;			 
+						}
+						
+						$subKomponenAtrib = array("id"=>"KodeSubKomponen", "tabindex"=>"17", "onchange"=>"javascript:pilihSubKomponen($this->jenisForm);");
+						echo $ctrlFrm->formSelect('KodeSubKomponen', $this->komponenSubDetailMenu['KodeSubKomponen'], $subKomponenAtrib, $subKomponenList);
+
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Total Quality :</td>
+					<td>
+						<?
+						$TotalQualityAttrib = array("placeholder"=>"Misal. 5000000", "onkeypress"=>"javascript:return isNumber(event)", "size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('TotalQuality', $this->komponenSubDetailMenu['TotalQuality'], $TotalQualityAttrib);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* IDR Total Cost :</td>
+					<td>
+						<?
+						$IDRTotalCostAttrib = array("placeholder"=>"Misal. 5000000", "onkeypress"=>"javascript:return isNumber(event)", "size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('IDRTotalCost', $this->komponenSubDetailMenu['IDRTotalCost'], $IDRTotalCostAttrib);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* USD Total Cost :</td>
+					<td>
+						<?
+						$USDTotalCostAttrib = array("placeholder"=>"Misal. 5000000", "onkeypress"=>"javascript:return isNumber(event)", "size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('USDTotalCost', $this->komponenSubDetailMenu['USDTotalCost'], $USDTotalCostAttrib);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* IDB USD Share :</td>
+					<td>
+						<?
+						$IDBUSBShareAttrib = array("placeholder"=>"Misal. 5000000", "onkeypress"=>"javascript:return isNumber(event)", "size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('IDBUSDShare', $this->komponenSubDetailMenu['IDBUSDShare'], $IDBUSBShareAttrib);
+						?>
+					</td>
+				</tr>				
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="komponenSubDetailMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

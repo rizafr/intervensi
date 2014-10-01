@@ -1,0 +1,165 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+function pilihSubKomponen(jenisForm)
+{
+	KodeSubKomponen = document.getElementById('KodeSubKomponen').value;
+	//jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailolahdata';
+	var param = {KodeSubKomponen:KodeSubKomponen,jenisForm:jenisForm};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function cariKomponenSubDetail(){
+	$("#frmCariKomponenSubDetail").ajaxForm(frmCariKomponenSubDetail_opt);
+	
+}
+
+var frmCariKomponenSubDetail_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function komponenSubDetailMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function KomponenSubDetailForm(jenisForm, KodeDetailSubKomponen)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailolahdata';
+	
+	var param = { jenisForm:jenisForm, KodeDetailSubKomponen:KodeDetailSubKomponen};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkomponensubdetail").ajaxForm(tambahKomponenSubDetail_opt);
+		jQuery("#frmubahkomponensubdetail").ajaxForm(ubahKomponenSubDetail_opt);		
+		});
+	
+}
+
+var tambahKomponenSubDetail_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/simpankomponensubdetail',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeDetailSubKomponen').value == ''){
+			alert('Kode Komponen Sub Detail harus Diisi');
+			return false;
+		}
+		if (document.getElementById('SubKomponenDetail').value == ''){
+			alert('Sub Komponen Detail harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Satuan').value == ''){
+			alert('Satuan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('TotalQuality').value == ''){
+			alert('Total Quality harus Diisi');
+			return false;
+		}
+		if (document.getElementById('IDRTotalCost').value == ''){
+			alert('IDR Total Cost harus Diisi');
+			return false;
+		}
+		if (document.getElementById('USDTotalCost').value == ''){
+			alert('USD Total Cost harus Diisi');
+			return false;
+		}
+		if (document.getElementById('IDBUSDShare').value == ''){
+			alert('IDBUSD Share Share harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKomponenSubDetail_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/simpankomponensubdetailedit',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeDetailSubKomponen').value == ''){
+			alert('Kode Komponen Sub Detail harus Diisi');
+			return false;
+		}
+		if (document.getElementById('SubKomponenDetail').value == ''){
+			alert('Sub Komponen Detail harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Satuan').value == ''){
+			alert('Satuan harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('TotalQuality').value == ''){
+			alert('Total Quality harus Diisi');
+			return false;
+		}
+		if (document.getElementById('IDRTotalCost').value == ''){
+			alert('IDR Total Cost harus Diisi');
+			return false;
+		}
+		if (document.getElementById('USDTotalCost').value == ''){
+			alert('USD Total Cost harus Diisi');
+			return false;
+		}
+		if (document.getElementById('IDBUSDShare').value == ''){
+			alert('IDBUSD Share Share harus Diisi');
+			return false;
+		}
+
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function KomponenSubDetailhapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailhapus';
+		var opt = {KodeDetailSubKomponen : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

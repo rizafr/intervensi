@@ -1,0 +1,106 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahpengguna'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahpengguna';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuspengguna';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Pengguna</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>" onsubmit="return validasi_input(this)">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">	
+				<? echo $ctrlFrm->formHidden('id', $this->penggunaMenu['id'], null);?>
+				<tr>
+				    <td align="right" width="180">* Pengguna :</td>
+					<td>
+						
+						<?
+						$PenggunaAttrib = array("size" => 50, "id" => "pengguna", "min"=>"3", "maxlength" => 50);
+						echo $ctrlFrm->formText('pengguna', $this->penggunaMenu['pengguna'], $penggunaAttrib);
+						?>
+					</td>
+				</tr>				
+				<tr>
+				    <td align="right" width="180">* Password:</td>
+					<td>
+						<?
+						$PasswordAttrib = array("size" => 100, "id" => "password",  "min"=>"3","maxlength" => 100);
+						echo $ctrlFrm->formText('password', $this->penggunaMenu['password'], $PasswordAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Instansi:</td>
+					<td>
+						<?
+						$jmlInstansiList = count($this->instansiList);
+						$instansiList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlInstansiList; $i++) {
+						    $instansiList[$this->instansiList[$i]->KodeInstansi] = (string)$this->instansiList[$i]->Instansi;			 
+						}						
+						$instansiAtrib = array("id"=>"KodeInstansi", "tabindex"=>"17");
+						
+						echo $ctrlFrm->formSelect('KodeInstansi', $this->penggunaMenu['KodeInstansi'], $instansiAtrib, $instansiList);
+										
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Level:</td>
+					<td>
+						<?						
+						$LevelList = array(
+							'Admin'     => 'Admin',						
+							'Pengunjung'     => 'Pengunjung'
+						);						
+							$levelAtrib = array("id"=>"level", "tabindex"=>"17");						
+							echo $ctrlFrm->formSelect('level', $this->penggunaMenu['level'], $levelAtrib, $LevelList);
+										
+						
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="penggunaMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

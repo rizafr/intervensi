@@ -1,0 +1,94 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahkomponensub'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahkomponensub';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuskomponensub';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Komponen Sub</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">				
+				<tr>
+				    <td align="right" width="180">* Kode Sub Komponen :</td>
+					<td>
+						
+						<?
+						if($jenisAksi == "Ubah"){
+							$KodeSubKomponenAttrib = array("readonly" => "true", "size" => 50,"maxlength" => 50);
+						}else{
+							$KodeSubKomponenAttrib = array("size" => 50,"maxlength" => 50);
+							}
+						echo $ctrlFrm->formText('KodeSubKomponen', $this->komponenSubMenu['KodeSubKomponen'], $KodeSubKomponenAttrib);
+						
+		?>
+					</td>
+				</tr>
+				
+				<tr>
+				    <td align="right" width="180">* Sub Komponen:</td>
+					<td>
+						<?
+						$SubKomponenAttrib = array("size" => 100,"maxlength" => 100);
+						echo $ctrlFrm->formText('SubKomponen', $this->komponenSubMenu['SubKomponen'], $SubKomponenAttrib);
+						?>
+						
+					</td>
+				</tr>
+				 <tr>
+				    <td align="right" width="180">* Kode Komponen :</td>
+					<td>
+						<?
+						$jmlKomponenList = count($this->komponenList);
+						$komponenList['-'] = '--Pilih--';
+						for ($i = 0; $i < $jmlKomponenList; $i++) {
+						    $komponenList[$this->komponenList[$i]->KodeKomponen] = (string)$this->komponenList[$i]->Komponen;			 
+						}
+						
+						$komponenAtrib = array("id"=>"KodeKomponen", "tabindex"=>"17", "onchange"=>"javascript:pilihKomponen($this->jenisForm);");
+						echo $ctrlFrm->formSelect('KodeKomponen', $this->komponenSubMenu['KodeKomponen'], $komponenAtrib, $komponenList);
+
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="komponenSubMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

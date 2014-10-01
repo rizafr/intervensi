@@ -1,0 +1,185 @@
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+function CariNamaDosen ()
+{
+
+	url = "<?php echo $this->basePath; ?>/adm/user/namadosen";
+	BukaWindows();
+}
+function CariNamaMahasiswa()
+{
+
+	url = "<?php echo $this->basePath; ?>/adm/user/namamahasiswa";
+	BukaWindows();
+}
+function pilihGroup(jenisForm)
+{
+	c_group = document.getElementById('c_group').value;
+	//jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/adm/user/userolahdata';
+	var param = {c_group:c_group,jenisForm:jenisForm};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+function cariUser()
+{
+	$("#frmCariUser").ajaxForm(frmCariUser_opt);
+}
+var frmCariUser_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/adm/user/userlist',
+		type: 'post', 
+		resetForm: false
+};
+function userlist()
+{
+	var url = '<?php echo $this->basePath; ?>/adm/user/userlist';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function userForm(jenisForm, id)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/adm/user/userolahdata';
+	
+	var param = { jenisForm:jenisForm, id:id};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahuser").ajaxForm(tambahUser_opt);
+		jQuery("#frmubahuser").ajaxForm(ubahUser_opt);
+		jQuery("#frmgantipass").ajaxForm(gantiPass_opt);
+		
+		});
+	
+}
+
+var tambahUser_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/user/user',
+	beforeSubmit : function() {
+		if (document.getElementById('username').value == ''){
+			alert('User harus Diisi');
+			return false;
+		}
+		if (document.getElementById('name').value == ''){
+			alert('Nama harus Diisi');
+			return false;
+		}
+		if (document.getElementById('user_id').value == ''){
+			alert('User ID harus Diisi');
+			return false;
+		}
+		if (document.getElementById('password').value == ''){
+			alert('Password harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahUser_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/user/userupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('username').value == ''){
+			alert('User harus Diisi');
+			return false;
+		}
+		if (document.getElementById('user_id').value == ''){
+			alert('User ID harus Diisi');
+			return false;
+		}
+		if (document.getElementById('password').value == ''){
+			alert('Password harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var gantiPass_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/user/userupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('username').value == ''){
+			alert('User harus Diisi');
+			return false;
+		}
+		if (document.getElementById('user_id').value == ''){
+			alert('User ID harus Diisi');
+			return false;
+		}
+		if (document.getElementById('password').value == ''){
+			alert('Password harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function userHapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/adm/user/userhapus';
+		var opt = {id : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+
+function ubahStatus(key)
+{
+	var userid= '';
+	var status= '';
+	if(document.getElementById('statusAktif_'+key).checked == true)
+	{
+		userid = document.getElementById('statusAktif_'+key).value;
+		status = '1';
+	}
+	else
+	{
+		userid = document.getElementById('statusAktif_'+key).value;
+		status = '0';
+	}
+	
+	var url = '<?php echo $this->basePath; ?>/adm/user/ubahstatus';
+	
+	var param = { userid:userid, status:status};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		doCount(5);
+	});
+}
+function cariNama()
+{
+	//var userid= '';
+	//var status= '';
+	nip = document.getElementById('nip').value;
+	var url = '<?php echo $this->basePath; ?>/adm/user/getnamaPegawai';
+	
+	var param = { nip:nip};
+	jQuery.get(url, param, function(data) {
+		document.getElementById('nama').value = data;
+	});
+}

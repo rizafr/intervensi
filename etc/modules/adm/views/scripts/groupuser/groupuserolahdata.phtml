@@ -1,0 +1,102 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+$ctrlFrm = new Zend_View();
+?>
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Tambah Data Groupuser</h2>
+	    <div class="spacer"></div> 
+		
+		<? if(strtolower($this->jenisForm) == 'insert') {	$n_namaForm = 'frmtambahgroupuser'; }
+			else if (strtolower($this->jenisForm) == 'update') {	$n_namaForm = 'frmubahgroupuser'; }
+			else {	$n_namaForm = 'frmhapusgroupuser'; }
+		
+		?>
+		<form method="post" name="<? echo $n_namaForm;?>" id="<? echo $n_namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+				<tr>
+				    <td align="right" width="180">* Groupuser :</td>
+					<td>
+						<?
+						$n_namaAttrib = array("size" => 5,"maxlength" => 5);
+						echo $ctrlFrm->formText('n_nama', $this->detailGroupuser['n_nama'], $n_namaAttrib);
+						echo $ctrlFrm->formHidden('id', $this->detailGroupuser['id'], null);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180"> Level :</td>
+					<td>
+						<?
+						$LevelList['-'] = '--Pilih--';
+						$LevelList['a1'] = 'Administrator';
+						$LevelList['bak'] = 'BAAK';
+						$LevelList['bak0'] = 'Ka BAAK Semua Jurusan';
+						$LevelList['jur'] = 'Jurusan';
+						$LevelList['jur0'] = 'Ka Jurusan Untuk semua Jurusan';
+						$LevelList['mh'] = 'Mahasiswa';
+						$LevelList['ds'] = 'Dosen';
+						$LevelList['pmb'] = 'PMB';
+						$LevelList['iku'] = 'IKU';
+						$LevelList['kp'] = 'Kepegawaian';
+						$n_levelAtrib = array("id"=>"n_level", "tabindex"=>"17");
+						echo $ctrlFrm->formSelect('n_level', trim($this->detailGroupuser['n_level']), $n_levelAtrib, $LevelList);
+
+						
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180"> Jurusan :</td>
+					<td>
+						<?
+						$jmlprodiList = count($this->prodiList);
+						$prodiList['0'] = '--Pilih--';
+						for ($i = 0; $i < $jmlprodiList; $i++) {
+						    $prodiList[$this->prodiList[$i]->id] = (string)$this->prodiList[$i]->n_prodi;			 
+						}
+						
+						$e_ketAtrib = array("id"=>"e_ket", "tabindex"=>"17");
+						echo $ctrlFrm->formSelect('e_ket', trim($this->detailGroupuser['e_ket']), $e_ketAtrib, $prodiList);
+
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180"> Keterangan :</td>
+					<td>
+						<?
+						$n_namaAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('keterangan', $this->detailGroupuser['keterangan'], $n_namaAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="groupuserlist();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,78 @@
+<?php
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once 'share/format_page.php';
+require_once "share/share_message.php";
+require_once "share/oa_dec_cur_conv.php";
+require_once "rekapmenujs.phtml";
+$referensi = Rekap_Service::getInstance();
+$referensi = Kegiatan_Service::getInstance();
+
+$ctrlFrm = new Zend_View();
+$pesan = new share_message();
+$halaman = new format_page();
+$dec_cur = new oa_dec_cur_conv();
+		
+$currentPage = $this->currentPage;
+$numToDisplay = $this->numToDisplay;
+
+?>
+
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Kontak</h2>
+		
+		<div class="space-line"></div>	
+		<fieldset class="fields"> 
+			<div class="spacer"> </div>
+			<div class="info">
+			<table width=450px>
+				<tr>
+					<td>Nama</td>
+					<td>:</td>
+					<td>Ratih Pujihati</td>
+				</tr>
+				<tr>
+					<td>NIM</td>
+					<td>:</td>
+					<td>1001126</td>
+				</tr>
+				<tr>
+					<td>Alamat</td>
+					<td>:</td>
+					<td>Jl. Ibu Ganirah No. 80 Kelurahan Cibeber, Kecamatan Cimahi Selatan 40531</td>
+				</tr>
+				<tr>
+					<td>Jurusan</td>
+					<td>:</td>
+					<td>Ilmu Komputer 2010</td>
+				</tr>
+				<tr>
+					<td>Fakultas</td>
+					<td>:</td>
+					<td>Fakultas Pendidikan Matematika dan Ilmu Pengetahuan Alam</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Universitas Pendidikan Indonesia</td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>:</td>
+					<td>ratih.pujihati@student.upi.edu</td>
+				</tr>
+			</table>
+			</div>
+		</fieldset>		
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>

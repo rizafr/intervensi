@@ -1,0 +1,102 @@
+<?php
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once 'share/format_page.php';
+require_once "share/share_message.php";
+require_once "share/oa_dec_cur_conv.php";
+require_once "komponensubmenujs.phtml";
+
+
+$referensi = Menu_Service::getInstance();
+
+$ctrlFrm = new Zend_View();
+$pesan = new share_message();
+$halaman = new format_page();
+$dec_cur = new oa_dec_cur_conv();
+		
+$currentPage = $this->currentPage;
+$numToDisplay = $this->numToDisplay;
+
+?>
+
+<div class="navlink">
+<a href="#" onClick="komponenSubMenu();" class="kembali"> Kembali </a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Komponen Sub</h2>
+		<div class="space-line"></div>		
+		<fieldset class="fields"> 
+			<div class="spacer"> </div>
+			<? 
+			
+			$status = $this->hasil;
+			$proses = $this->proses;
+			$keterangan = $this->keterangan;
+			
+			$pesan->show_message($proses, $keterangan, "$status" ); ?>
+			<div class="spacer"> </div>	
+			<div class="blank"></div>
+			
+			<table id="sorter" class="sortable" cellspacing="1" cellpadding="2" border="0" align="center">
+				<th width=5%  class="nosort">No</th> 
+				<th width=10% class="sorted order2 sortable">Kode Komponen Sub Detail</th> 
+				<th width=10% class="sorted order2 sortable">Sub Komponen Detail</th> 
+				<th width=10% class="sorted order2 sortable">Satuan</th> 
+				<th width=10% class="sorted order2 sortable">Kode Sub Komponen</th> 
+				<th width=10% class="sorted order2 sortable">Total Quality</th> 
+				<th width=10% class="sorted order2 sortable">IDR Total Cost</th> 
+				<th width=10% class="sorted order2 sortable">USD Total Cost</th> 
+				<th width=10% class="sorted order2 sortable">IDB USD Share</th> 			
+				<?php
+					if (count($this->detail) == 0){ 
+				?>
+					<tr class="event2"><td colspan="9"><font color="red">Data Tidak Ditemukan</font></td></tr>
+				<?} else {					
+					foreach ($this->detail as $key => $val): 
+					if ($key%2==0) { ?>
+						<tr class="event">
+					<? } else if ($key%2==1) { ?>
+						<tr class="event2">
+					<? } 
+					$KodeDetailSubKomponen = $this->escape($val['KodeDetailSubKomponen']); 
+					$SubKomponenDetail = $this->escape($val['SubKomponenDetail']); 
+					$Satuan = $this->escape($val['Satuan']); 
+					$KodeSubKomponen = $this->escape($val['KodeSubKomponen']); 
+					$TotalQuality = $this->escape($val['TotalQuality']); 
+					$IDRTotalCost = $this->escape($val['IDRTotalCost']); 
+					$USDTotalCost = $this->escape($val['USDTotalCost']); 
+					$IDBUSDShare = $this->escape($val['IDBUSDShare']);				
+					$noUrut = (($currentPage -1)* $numToDisplay) + $key +1;
+					?>
+					
+					<td class="clright"><? echo $noUrut;?>&nbsp;&nbsp;</td>
+					<td class="clleft">&nbsp;<? echo $KodeDetailSubKomponen;?></td>
+					<td class="clleft">&nbsp;<? echo $SubKomponenDetail;?></td>
+					<td class="clleft">&nbsp;<? echo $Satuan;?></td>										
+					<td class="clleft">&nbsp;<? echo $KodeSubKomponen;?></td>										
+					<td class="clleft">&nbsp;<? echo $TotalQuality;?></td>										
+					<td class="clleft">&nbsp;<? echo $IDRTotalCost;?></td>										
+					<td class="clleft">&nbsp;<? echo $USDTotalCost;?></td>										
+					<td class="clleft">&nbsp;<? echo $IDBUSDShare;?></td>	
+					</tr>
+					<?
+					endforeach;
+				}
+				?>
+			</table>
+			<?	
+			$totalData = $this->totKomponenSubDetail;
+			$modul = $this->basePath."/komponensub/komponensub/detailkomponensub";			
+			echo $halaman->showPage($totalData, $numToDisplay, $currentPage, 'tableview', $modul, $param1, $param2, $param3, $param4);		
+			?>
+		</fieldset>		 
+		
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>

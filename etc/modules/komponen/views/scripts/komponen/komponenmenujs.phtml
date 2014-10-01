@@ -1,0 +1,107 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function detail(KodeKomponen){	
+	var url = '<?php echo $this->basePath; ?>/komponen/komponen/detailkomponen';
+	var param = {KodeKomponen:KodeKomponen};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);	
+	});
+}
+
+function cariKomponen(){
+	$("#frmCariKomponen").ajaxForm(frmCariKomponen_opt);
+	
+}
+
+var frmCariKomponen_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/komponen/komponen/komponenmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function komponenMenu(){
+	var url = '<?php echo $this->basePath; ?>/komponen/komponen/komponenmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function komponenForm(jenisForm, KodeKomponen){	
+	var url = '<?php echo $this->basePath; ?>/komponen/komponen/komponenolahdata';
+	
+	var param = { jenisForm:jenisForm, KodeKomponen:KodeKomponen};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkomponen").ajaxForm(tambahKomponen_opt);
+		jQuery("#frmubahkomponen").ajaxForm(ubahKomponen_opt);		
+		});
+	
+}
+
+var tambahKomponen_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponen/komponen/simpankomponen',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Komponen').value == ''){
+			alert('Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Urut').value == ''){
+			alert('Urut harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKomponen_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponen/komponen/simpankomponenedit',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Komponen').value == ''){
+			alert('Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('Urut').value == ''){
+			alert('Urut harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function Komponenhapus(param1, param2){	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/komponen/komponen/komponenhapus';
+		var opt = {KodeKomponen : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>

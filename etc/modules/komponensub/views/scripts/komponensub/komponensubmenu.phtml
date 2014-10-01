@@ -1,0 +1,110 @@
+<?php
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once 'share/format_page.php';
+require_once "share/share_message.php";
+require_once "share/oa_dec_cur_conv.php";
+require_once "komponensubmenujs.phtml";
+
+
+$referensi = Menu_Service::getInstance();
+
+$ctrlFrm = new Zend_View();
+$pesan = new share_message();
+$halaman = new format_page();
+$dec_cur = new oa_dec_cur_conv();
+		
+$currentPage = $this->currentPage;
+$numToDisplay = $this->numToDisplay;
+
+?>
+<div class="navlink">
+<a href="#" class="home" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/home');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title">Komponen Sub</h2>
+		<div class="search-panel">
+			<form method="post" id="frmCariKomponenSub" name="frmCariKomponenSub">Kata Kunci :
+				<?
+				$kategoriCari = array("SubKomponen" => "Sub Komponen",  "KodeSubKomponen" => "Kode Sub Komponen");
+										
+				echo $ctrlFrm->formSelect('kategoriCari', $this->kategoriCari, null, $kategoriCari);						
+				?>
+				<input type="text" name="carii">
+				<?
+			         $atribSubmit = array("onclick"=>"javascript:cariKomponenSub();");
+			         echo $ctrlFrm->formSubmit('cari', 'Search', $atribSubmit)."&nbsp;";
+				?>
+			</form>
+		</div>
+		<div class="space-line"></div>		
+		<fieldset class="fields"> 
+			<div class="spacer"> </div>
+			<? 
+			
+			$status = $this->hasil;
+			$proses = $this->proses;
+			$keterangan = $this->keterangan;
+			
+			$pesan->show_message($proses, $keterangan, "$status" ); ?>
+			<div class="spacer"> </div>	
+			
+			<div class="add" title="Tambah Data" onClick="komponenSubForm('insert','');"></div> 
+
+			<div class="blank"></div>
+			
+			
+			<table id="sorter" class="sortable" cellspacing="1" cellpadding="2" border="0" align="center">
+				<th width=2.5%  class="nosort">No</th> 
+				<th width=10% class="sorted order2 sortable">Kode Sub Komponen</th> 
+				<th width=15% class="sorted order2 sortable">Sub Komponen</th> 
+				<th width=10% class="sorted order2 sortable" >Kode Komponen</th> 
+				<th width=5% colspan="2"  class="nosort">Tindakan</th>
+				
+				<?php
+					if (count($this->komponenSubMenu) == 0){ 
+				?>
+					<tr class="event2"><td colspan="5"><font color="red">Data Tidak Ditemukan</font></td></tr>
+				<?} else {					
+					foreach ($this->komponenSubMenu as $key => $val): 
+					if ($key%2==0) { ?>
+						<tr class="event">
+					<? } else if ($key%2==1) { ?>
+						<tr class="event2">
+					<? } 
+					$KodeSubKomponen = $this->escape($val['KodeSubKomponen']); 
+					$SubKomponen = $this->escape($val['SubKomponen']); 
+					$KodeKomponen = $this->escape($val['KodeKomponen']); 				
+					$noUrut = (($currentPage -1)* $numToDisplay) + $key +1;
+					$name = $this->escape($val['name']);			
+					
+					?>
+					
+					<td class="clright"><? echo $noUrut;?>&nbsp;&nbsp;</td>
+					<td class="clleft">&nbsp;<? echo $KodeSubKomponen;?></td>
+					<td a href="#" class="navdetail" title="Detail <? echo $SubKomponen;?>" onClick="detailsub('<? echo $KodeSubKomponen;?>')">&nbsp;<? echo $SubKomponen;?></a></td>
+					<td class="clleft">&nbsp;<? echo $KodeKomponen;?></td>										
+					<td><div onClick="komponenSubForm('update','<? echo $KodeSubKomponen;?>');" class="edit" title="Ubah Data"></div></td>
+					<td><div class="delete" title="Hapus Data" onClick="KomponenSubhapus('KodeSubKomponen', '<? echo $KodeSubKomponen; ?>')" ></td>
+					</tr>
+					<?
+					endforeach;
+				}
+				?>
+			</table>
+			<?	
+			$totalData = $this->totKomponenSub;
+			$modul = $this->basePath."/komponensub/komponensub/komponensubmenu";			
+			echo $halaman->showPage($totalData, $numToDisplay, $currentPage, 'tableview', $modul, $param1, $param2, $param3, $param4);		
+			?>
+		</fieldset>		 
+		
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>

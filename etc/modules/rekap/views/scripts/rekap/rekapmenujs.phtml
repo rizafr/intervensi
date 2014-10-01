@@ -1,0 +1,32 @@
+<script type="text/javascript">
+function BukaWindows(url){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function rekapKegiatan(){
+	KodeKegiatan = document.getElementById('KodeKegiatan').value;
+	Kelurahan = document.getElementById('Kelurahan').value;
+	url = 'http://127.0.0.1:56453/viewer/frameset?__report=E%3A%5Cworkspace+PLA%5CreportKelurahan%5Ckegiatankelurahan.rptdesign&__format=html&__svg=false&__locale=en_US&__timezone=Asia%2FBangkok&__masterpage=true&__rtl=false&__cubememsize=10&__resourceFolder=E%3A%5Cworkspace+PLA%5CreportKelurahan&__dpi=96&793925471&KodeKegiatan='+KodeKegiatan+'&Kelurahan='+Kelurahan;
+	var param = {KodeKegiatan:KodeKegiatan, Kelurahan:Kelurahan};
+	
+	BukaWindows(url);
+	return false;
+} 
+
+
+function rekapKelurahan(){
+	Kelurahan = document.getElementById('Kelurahan').value;
+	url = 'http://127.0.0.1:56453/viewer/frameset?__report=E%3A%5Cworkspace+PLA%5CreportKelurahan%5Ckelurahanaja.rptdesign&__format=html&__svg=false&__locale=en_US&__timezone=Asia%2FBangkok&__masterpage=true&__rtl=false&__cubememsize=10&__resourceFolder=E%3A%5Cworkspace+PLA%5CreportKelurahan&__dpi=96&666463934&Kelurahan='+Kelurahan;
+	var param = {Kelurahan:Kelurahan};
+	
+	BukaWindows(url);
+	return false;
+} 
+</script>

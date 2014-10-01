@@ -1,0 +1,43 @@
+<h2 class="accessibility">Navigation</h2><!--start nav-->
+<div id='colortab' class='ddcolortabs'>
+  <ul>
+    <li class=round><a title=Beranda rel=beranda href="<?php echo $this->basePath; ?>/home/index/home"><span>Beranda</span></a></li>
+	<li class=round><a title=Manajemen.Menu rel=menu><span>Manajemen Menu</span></a></li>
+	<li class=round><a title=Program rel=program><span>Program</span></a></li>
+	<li class=round><a title=Rekap rel=rekap><span>Rekap</span></a></li>
+	<li class=round><a title=Kontak rel=kontak ><span>Kontak</span></a></li>
+	
+  </ul>
+</div>	
+
+<div id=kontak class='dropmenudiv_a'>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/kontak','<?php echo $this->basePath; ?>/adm/user/userjs');">Kontak Kami</a>
+</div> 
+
+<div id=beranda class='dropmenudiv_a'>
+	<a href="?slnt=loginprc&slntx=lout&mdlid=0">Logout</a>
+</div> 
+
+<div id=menu class='dropmenudiv_a'>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/komponen/komponen/komponenmenu','<?php echo $this->basePath; ?>/adm/user/userjs');">Komponen</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubmenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Komponen Sub</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/komponensubdetail/komponensubdetail/komponensubdetailmenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Komponen Sub Detail</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/kecamatan/kecamatan/kecamatanmenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Kecamatan</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/kelurahan/kelurahan/kelurahanmenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Kelurahan</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/provinsi/provinsi/provinsimenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Provinsi</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/kota/kota/kotamenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Kota</a>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/pengguna/pengguna/penggunamenu','<?php echo $this->basePath; ?>/adm/groupuser/groupuserjs');">Pengguna</a>
+</div> 
+
+<div id=program class='dropmenudiv_a'>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanmenu','<?php echo $this->basePath; ?>/adm/user/userjs');">Kegiatan</a>
+</div> 
+
+<div id=rekap class='dropmenudiv_a'>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/rekapmenukelurahan','<?php echo $this->basePath; ?>/adm/user/userjs');">Rekap Kelurahan</a>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/rekapmenukegiatan','<?php echo $this->basePath; ?>/adm/user/userjs');">Rekap Kegiatan</a>
+</div> 
+
+<script type="text/javascript">tabdropdown.init("colortab", "auto")</script>
+
+		

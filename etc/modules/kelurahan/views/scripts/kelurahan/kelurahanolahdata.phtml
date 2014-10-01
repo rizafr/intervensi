@@ -1,0 +1,78 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahkelurahan'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahkelurahan';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuskelurahan';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Kelurahan</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">				
+				<tr>
+				    <td align="right" width="180">* Kode Kelurahan :</td>
+					<td>
+						
+						<?
+						if($jenisAksi == "Ubah"){
+							$KodeKelurahanAttrib = array("readonly" => "true","size" => 50,"maxlength" => 50);
+						}else{
+							$KodeKelurahanAttrib = array("size" => 50,"maxlength" => 50);
+						}
+						echo $ctrlFrm->formText('kode_kelurahan', $this->kelurahanMenu['kode_kelurahan'], $KodeKelurahanAttrib);
+						
+		?>
+					</td>
+				</tr>
+				
+				<tr>
+				    <td align="right" width="180">* Kelurahan:</td>
+					<td>
+						<?
+						$KelurahanAttrib = array("size" => 100,"maxlength" => 100);
+						echo $ctrlFrm->formText('Kelurahan', $this->kelurahanMenu['Kelurahan'], $KelurahanAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="kelurahanMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

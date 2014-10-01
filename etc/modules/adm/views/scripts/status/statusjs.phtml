@@ -1,0 +1,70 @@
+function caristatus()
+{
+	$("#frmcaristatus").ajaxForm(frmcaristatus_opt);
+}
+var frmcaristatus_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/adm/status/statuslist',
+		type: 'post', 
+		resetForm: false
+};
+function statuslist()
+{
+	var url = '<?php echo $this->basePath; ?>/adm/status/statuslist';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function statusForm(jenisForm, kd_status)
+{
+	var url = '<?php echo $this->basePath; ?>/adm/status/statusolahdata';
+	var param = { jenisForm:jenisForm, kd_status:kd_status};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahstatus").ajaxForm(tambahStatus_opt);
+		jQuery("#frmubahstatus").ajaxForm(ubahStatus_opt);
+	});
+}
+
+var tambahStatus_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/status/status',
+	beforeSubmit : function() {
+		if (document.getElementById('nm_status').value == ''){
+			alert('Status harus Diisi');
+			return false;
+		}
+		
+	},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahStatus_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/status/statusupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('nm_status').value == ''){
+			alert('Status harus Diisi');
+			return false;
+		}
+		
+	},
+	type: 'post', 
+	resetForm: false
+};
+
+function statusHapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/adm/status/statushapus';
+		var opt = {kd_status : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  

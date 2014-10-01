@@ -1,0 +1,72 @@
+function caripropinsi()
+{
+	$("#frmcaripropinsi").ajaxForm(frmcaripropinsi_opt);
+}
+var frmcaripropinsi_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/adm/propinsi/propinsilist',
+		type: 'post', 
+		resetForm: false
+};
+function propinsilist()
+{alert("22");
+	var url = '<?php echo $this->basePath; ?>/adm/propinsi/propinsilist';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function propinsiForm(jenisForm, id)
+{
+	var url = '<?php echo $this->basePath; ?>/adm/propinsi/propinsiolahdata';
+	var param = { jenisForm:jenisForm, id:id};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahpropinsi").ajaxForm(tambahPropinsi_opt);
+		jQuery("#frmubahpropinsi").ajaxForm(ubahPropinsi_opt);
+	});
+}
+
+var tambahPropinsi_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/propinsi/propinsi',
+	beforeSubmit : function() {
+		if (document.getElementById('n_propinsi').value == ''){
+			alert('Propinsi harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahPropinsi_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/adm/propinsi/propinsiupdate',
+	beforeSubmit : function() {
+		if (document.getElementById('n_propinsi').value == ''){
+			alert('Propinsi harus Diisi');
+			return false;
+		}
+		
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function propinsiHapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/adm/propinsi/propinsihapus';
+		var opt = {id : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  

@@ -1,0 +1,30 @@
+<h2 class="accessibility">Navigation</h2><!--start nav-->
+<div id='colortab' class='ddcolortabs'>
+  <ul>
+    <li class=round><a title=Beranda rel=beranda href="<?php echo $this->basePath; ?>/home/index/home"><span>Beranda</span></a></li>
+	<li class=round><a title=Program rel=program><span>Program</span></a></li>
+	<li class=round><a title=Rekap rel=rekap><span>Rekap</span></a></li>
+	<li class=round><a title=Kontak rel=kontak ><span>Kontak</span></a></li>
+  </ul>
+</div>	
+
+<div id=kontak class='dropmenudiv_a'>
+	<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/kontak','<?php echo $this->basePath; ?>/adm/user/userjs');">Kontak Kami</a>
+</div> 
+
+<div id=beranda class='dropmenudiv_a'>
+	<a href="?slnt=loginprc&slntx=lout&mdlid=0">Logout</a>
+</div> 
+
+<div id=program class='dropmenudiv_a'>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/kegiatan/kegiatan/kegiatanmenu','<?php echo $this->basePath; ?>/adm/user/userjs');">Kegiatan</a>
+</div> 
+
+<div id=rekap class='dropmenudiv_a'>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/rekapmenukelurahan','<?php echo $this->basePath; ?>/adm/user/userjs');">Rekap Kelurahan</a>
+			<a href="#" onclick="open_url_to_div('<?php echo $this->basePath; ?>/rekap/rekap/rekapmenukegiatan','<?php echo $this->basePath; ?>/adm/user/userjs');">Rekap Kegiatan</a>
+</div> 
+
+<script type="text/javascript">tabdropdown.init("colortab", "auto")</script>
+
+		

@@ -1,0 +1,78 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahkecamatan'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahkecamatan';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuskecamatan';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Kecamatan</h2>
+	    <div class="spacer"></div> 
+		
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">				
+				<tr>
+				    <td align="right" width="180">* Kode Kecamatan :</td>
+					<td>
+						
+						<?
+						if($jenisAksi == "Ubah"){
+							$KodeKecamatanAttrib = array("readonly" => "true", "size" => 50,"maxlength" => 50);
+						}else{
+							$KodeKecamatanAttrib = array("size" => 50,"maxlength" => 50);
+						}
+						echo $ctrlFrm->formText('kode_kecamatan', $this->kecamatanMenu['kode_kecamatan'], $KodeKecamatanAttrib);
+						
+		?>
+					</td>
+				</tr>
+				
+				<tr>
+				    <td align="right" width="180">* Kecamatan :</td>
+					<td>
+						<?
+						$KecamatanAttrib = array("size" => 100,"maxlength" => 100);
+						echo $ctrlFrm->formText('nama_kecamatan', $this->kecamatanMenu['nama_kecamatan'], $KecamatanAttrib);
+						?>
+						
+					</td>
+				</tr>
+				<tr>
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="kecamatanMenu();"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

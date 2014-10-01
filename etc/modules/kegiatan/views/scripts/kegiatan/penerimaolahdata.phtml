@@ -1,0 +1,141 @@
+<?
+require_once 'Zend/View.php';
+require_once 'share/format_date.php'; 
+require_once "share/oa_dec_cur_conv.php";
+
+
+$ctrlFrm = new Zend_View();
+?>
+<? if(strtolower($this->jenisForm) == 'insert') {
+		$namaForm = 'frmtambahpenerima'; 
+		$jenisAksi = 'Tambah';
+		}
+    else if (strtolower($this->jenisForm) == 'update') {
+		$namaForm = 'frmubahpenerima';  
+		$jenisAksi = 'Ubah';
+		}
+	  else {	
+	        $namaForm = 'frmhapuspenerima';  
+			$jenisAksi = 'Hapus';
+		}
+		
+?>
+		
+<div class="navlink">
+<a href="#" onclick="open_url_to_home('<?php echo $this->basePath; ?>/home/index/depan','<?php echo $this->basePath; ?>/home/index/main');">Halaman Utama</a>
+</div>
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<h2 class="title"><? echo $jenisAksi;?> Data Penerima </h2>
+	   
+		<div class="search-panel">
+		<?php
+			if($jenisAksi == 'Tambah'){ ?>
+				<input type= "submit" onClick="return Popup();" value="DATA PPLS">
+		<?php }
+		?>		
+		</div>
+		<div class="space-line"></div>	
+		 <div class="spacer"></div> 
+		<form method="post" name="<? echo $namaForm;?>" id="<? echo $namaForm;?>">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">	
+				<? echo $ctrlFrm->formHidden('IdPendaftaran', $this->penerimaOlahMenu['IdPendaftaran'], null);?>
+				
+				<tr>
+				    <td align="right" width="180">* NIK :</td>
+					<td>
+						
+						<?
+						if($jenisAksi=='Tambah'){
+							$nik = array("size" => 50,"maxlength" => 50);
+						}else{
+							$nik = array("readonly"=>"true","size" => 50,"maxlength" => 50);
+						}							
+						echo $ctrlFrm->formText('NIK', $this->penerimaOlahMenu['NIK'], $nik);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Nama :</td>
+					<td>
+						
+						<?
+						$NamaAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('NamaLengkap', $this->penerimaOlahMenu['NamaLengkap'], $NamaAttrib);
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Alamat :</td>
+					<td>						
+						<?						
+						$AlamatAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('Alamat', $this->penerimaOlahMenu['Alamat'], $AlamatAttrib);
+						
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Status :</td>
+					<td>						
+						<?
+						$StatusAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('Status', $this->penerimaOlahMenu['Status'], $StatusAttrib);
+						?>
+					</td>
+				</tr>	
+				<tr>
+				    <td align="right" width="180">* Kelurahan :</td>
+					<td>						
+						<?
+							$KelurahanAttrib = array("size" => 50,"maxlength" => 50);
+							echo $ctrlFrm->formText('Kelurahan', $this->penerimaOlahMenu['Kelurahan'], $KelurahanAttrib);						
+					
+						?>
+					</td>
+				</tr>				
+				<tr>
+				    <td align="right" width="180">* Nama Kegiatan :</td>
+					<td>						
+						<?
+						echo $ctrlFrm->formHidden('KodeKegiatan', $this->KodeKegiatan, null);
+						
+						if($jenisAksi=='Tambah'){
+							$NamaKegiatanAttrib = array("readonly"=>"true", "size" => 50,"maxlength" => 50);
+							echo $ctrlFrm->formText('NamaKegiatan', $this->NamaKegiatan, $NamaKegiatanAttrib);
+						}else{
+							$NamaKegiatanAttrib = array("readonly"=>"true", "size" => 50,"maxlength" => 50);
+							echo $ctrlFrm->formText('NamaKegiatan', $this->penerimaOlahMenu['NamaKegiatan'], $NamaKegiatanAttrib);
+						}						
+						?>
+					</td>
+				</tr>
+				<tr>
+				    <td align="right" width="180">* Keterangan :</td>
+					<td>
+						
+						<?
+						$KetAttrib = array("size" => 50,"maxlength" => 50);
+						echo $ctrlFrm->formText('Ket', $this->penerimaOlahMenu['Ket'], $KetAttrib);
+						?>
+					</td>
+				</tr>
+
+				    <td></td>
+				    <td>
+						<div class="right">
+							<input type="button" value="Batal" onClick="penerimaMenu('<? echo $this->KodeKegiatan;?>');"> 
+							<input type="reset" value="Ulangi"> 
+							<input   type="submit" value="Simpan">
+						</div>
+					</td>
+				</tr>
+				<tr>
+				    <td>* Harus Diisi</td>
+				    <td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

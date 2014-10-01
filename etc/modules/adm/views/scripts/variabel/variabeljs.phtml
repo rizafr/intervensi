@@ -1,0 +1,115 @@
+$("#frmcatatvariabel").ajaxForm(option_tambahdatavariabel);
+
+
+function lihatdatavariabel(par)
+{
+	url = "<?php echo $this->basePath; ?>/adm/variabel/variabel"
+	
+	var opt = {par:par};
+	jQuery.get(url,opt,function(data) {
+		$("#tableview").html(data);
+			$("#frmcatatvariabel").ajaxForm(option_tambahdatavariabel);
+		});
+
+}
+
+function ubahvariabel (par,id)
+{
+	url = "<?php echo $this->basePath; ?>/adm/variabel/variabelubah"
+	var opt = {par:par,id:id};
+	jQuery.get(url,opt,function(data) {
+		$("#tableview").html(data);
+			$("#frmcatatvariabel").ajaxForm(option_tambahdatavariabel);
+		});
+		
+}
+
+
+function hapusvariabel (c_variabel,id)
+{
+	var where_to= confirm("Yakin anda akan hapus Data ini ???");
+	 if (where_to== true)
+	 {
+		url = "<?php echo $this->basePath; ?>/adm/variabel/hapusdatavariabel"
+		var opt = {id:id,c_variabel:c_variabel};
+		jQuery.get(url,opt,function(data) {
+			$("#tableview").html(data);
+			$("#frmcatatvariabel").ajaxForm(option_tambahdatavariabel);
+			});
+	 }
+}
+
+
+
+var option_tambahdatavariabel = {
+	target:'#tableview',
+	beforeSubmit: function() { 
+					aobj= document.frmcatatvariabel;
+					astr= "document.frmcatatvariabel";
+					var cekVal = validasidatavariabel(aobj,astr);
+					if (cekVal == false) {
+					return false;}
+						}, 
+	success:masukdatavariabelsukses,
+	url: '<?php echo $this->basePath; ?>/adm/variabel/maintaindata',
+	type: 'post',
+	resetForm: false
+};
+
+function masukdatavariabelsukses() {
+	location.href="#top";
+	doCounter(5);
+	$("#frmcatatvariabel").ajaxForm(option_tambahdatavariabel);
+}
+
+function validasidatavariabel(xy,xstr)
+{
+	
+   with(xy){
+      
+         var Proceed = 1;
+         var Message;
+         var FocusField;
+         while (Proceed == 1)
+         {
+
+			if(!c_var.value){
+               Message = "kode variabel tidak boleh kosong";
+               FocusField = "c_var";
+               Proceed = 0;
+               break;
+            }
+			if((!n_var.value)){
+               Message = "variabel tidak boleh kosong";
+               FocusField = "n_var";
+               Proceed = 0;
+               break;
+            }
+
+            break;
+         }
+        
+         if (Proceed == 1){ 
+            return true;
+         }else{
+            alert( Message );
+            eval(xstr+"."+FocusField+".focus();");           	
+            return false;
+         }
+   }
+}
+
+function doCounter(countdown) {
+	document.getElementById("confirm").style.display="block";
+	if (countdown > 0) {
+        countdown=countdown-1;
+		window.status=countdown + " seconds left to view this page.";
+		setTimeout('doCounter()',5000); 
+    }
+    else {
+        document.getElementById("confirm").style.display="none";
+    } 
+}
+
+
+

@@ -1,0 +1,123 @@
+<script type="text/javascript">
+function BukaWindows(){
+	var w = 0; 
+	var h = 0;
+	w = screen.availWidth;
+	h = screen.availHeight;
+	var popW = 800, popH = 600;
+	var leftc = (w-popW)/2;
+	var topc = (h-popH)/2;
+	var selectWindow = window.open(url,'Selection', 'left=' + leftc + ',top=' + topc + ', width='+popW+',height='+popH+',resizable=0,scrollbars=yes');
+}
+
+function detailsub(KodeSubKomponen){	
+	var url = '<?php echo $this->basePath; ?>/komponensub/komponensub/detailkomponensub';
+	var param = {KodeSubKomponen:KodeSubKomponen};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);	
+	});
+}
+
+function pilihKomponen(jenisForm)
+{
+	KodeKomponen = document.getElementById('KodeKomponen').value;
+	//jenisForm = document.getElementById('jenisForm').value;
+	var url = '<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubolahdata';
+	var param = {KodeKomponen:KodeKomponen,jenisForm:jenisForm};
+	jQuery.get(url, param, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function cariKomponenSub(){
+	$("#frmCariKomponenSub").ajaxForm(frmCariKomponenSub_opt);
+	
+}
+
+var frmCariKomponenSub_opt = {
+		target : '#tableview',
+		url: '<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubmenu',
+		type: 'post', 
+		resetForm: false
+};
+
+function komponenSubMenu()
+{
+	var url = '<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubmenu';
+	jQuery.get(url, function(data) {
+		$("div#tableview").html(data);
+	});
+}
+
+function komponenSubForm(jenisForm, KodeSubKomponen)
+{
+	
+	var url = '<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubolahdata';
+	
+	var param = { jenisForm:jenisForm, KodeSubKomponen:KodeSubKomponen};
+	jQuery.get(url, param, function(data) {
+		jQuery("div#tableview").html(data);
+		jQuery("#frmtambahkomponensub").ajaxForm(tambahKomponenSub_opt);
+		jQuery("#frmubahkomponensub").ajaxForm(ubahKomponenSub_opt);		
+		});
+	
+}
+
+var tambahKomponenSub_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponensub/komponensub/simpankomponensub',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('SubKomponen').value == ''){
+			alert('Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+var ubahKomponenSub_opt = {
+	target : '#tableview',
+	url: '<?php echo $this->basePath; ?>/komponensub/komponensub/simpankomponensubedit',
+	beforeSubmit : function() {
+		if (document.getElementById('KodeSubKomponen').value == ''){
+			alert('Kode Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('SubKomponen').value == ''){
+			alert('Sub Komponen harus Diisi');
+			return false;
+		}
+		if (document.getElementById('KodeKomponen').value == ''){
+			alert('Kode Komponen harus Diisi');
+			return false;
+		}
+	},
+	success: function(){doCount(5);},
+	type: 'post', 
+	resetForm: false
+};
+
+function KomponenSubhapus(param1, param2)
+{ 
+	
+	if(ConfirmDelete(param1, param2))
+	{	//alert("test");
+		handler = '<?php echo $this->basePath; ?>/komponensub/komponensub/komponensubhapus';
+		var opt = {KodeSubKomponen : param2};
+		jQuery.get(handler,opt,function(data) {
+				$("#tableview").html(data);
+				doCount(5);
+			 });
+	}
+}  
+</script>
